@@ -1,16 +1,13 @@
 package com.hsw.birdparkmanagement.service;
 
-import com.hsw.birdparkmanagement.model.Attraction;
-import com.hsw.birdparkmanagement.model.Metadata;
-import com.hsw.birdparkmanagement.model.ROMetadata;
-import com.hsw.birdparkmanagement.model.Tour;
+import com.hsw.birdparkmanagement.model.*;
 import com.hsw.birdparkmanagement.repository.AttractionRepository;
 import com.hsw.birdparkmanagement.repository.MetadataRepository;
 import com.hsw.birdparkmanagement.repository.TourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Meta;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,44 +35,61 @@ public class PublicService {
                     break;
                 case "description":
                     metadata.setDescription(data.getValue());
+                    break;
             }
         });
         return metadata;
     }
 
-    public Iterable<Attraction> getAttractions() {
-        return this.attractionRepository.findAll();
-    }
-
     //Attractions
-    public Iterable<Attraction> getAllAttractions() {
-        return this.attractionRepository.findAll();
+    public Iterable<ROAttraction> getAllAttractions() {
+        List<ROAttraction> attractions = new ArrayList<ROAttraction>();
+        this.attractionRepository.findAll().forEach(attraction -> {
+            ROAttraction roAttraction = new ROAttraction(attraction);
+            roAttraction.setNearestTourNames(this.attractionRepository.getNearestTourNames(attraction.getName()));
+            attractions.add(roAttraction);
+        });
+        return attractions;
     }
 
-    public Optional<Attraction> getAttraction(String name) {
-        return this.attractionRepository.findById(name);
+    public Optional<ROAttraction> getAttraction(String name) {
+        Attraction attraction = this.attractionRepository.findById(name).orElse(null);
+        if (attraction == null) {
+            return Optional.empty();
+        }
+        ROAttraction roAttraction = new ROAttraction(attraction);
+        roAttraction.setNearestTourNames(this.attractionRepository.getNearestTourNames(name));
+        return Optional.of(roAttraction);
     }
 
     public List<String> getAttractionNames() {
-        return null;
-        //return this.attractionRepository.getAttractionNames();
+        return this.attractionRepository.getAttractionNames();
     }
 
 
     //Tours
-    public Iterable<Tour> getAllTours() {
-        return this.tourRepository.findAll();
+    public List<ROTour> getAllTours() {
+        List<ROTour> tours = new ArrayList<ROTour>();
+        this.tourRepository.findAll().forEach(tour -> {
+            ROTour roTour = new ROTour(tour);
+            roTour.setAttractionNames(this.tourRepository.getAttractions(tour.getName()));
+            tours.add(roTour);
+        });
+        return tours;
     }
 
-    public Optional<Tour> getTour(String name) {
-        return this.tourRepository.findById(name);
+    public Optional<ROTour> getTour(String name) {
+        Tour tour = this.tourRepository.findById(name).orElse(null);
+        if (tour == null) {
+            return Optional.empty();
+        }
+        ROTour roTour = new ROTour(tour);
+        roTour.setAttractionNames(this.tourRepository.getAttractions(name));
+        return Optional.of(roTour);
     }
 
-    public Iterable<Tour> getTours() {
-        return this.tourRepository.findAll();
-    }
 
     public List<String> getTourNames() {
-        return null;
+        return this.tourRepository.getTourNames();
     }
 }

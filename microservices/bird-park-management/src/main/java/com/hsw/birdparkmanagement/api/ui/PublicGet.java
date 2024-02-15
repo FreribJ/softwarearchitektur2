@@ -1,13 +1,11 @@
 package com.hsw.birdparkmanagement.api.ui;
 
-import com.hsw.birdparkmanagement.model.Attraction;
-import com.hsw.birdparkmanagement.model.Metadata;
-import com.hsw.birdparkmanagement.model.ROMetadata;
-import com.hsw.birdparkmanagement.model.Tour;
+import com.hsw.birdparkmanagement.model.*;
 import com.hsw.birdparkmanagement.service.PublicService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,13 +29,13 @@ public class PublicGet {
 
     //Attraction
     @GetMapping("/attractions")
-    public Iterable<Attraction> attractions() {
-        return this.publicService.getAttractions();
+    public Iterable<ROAttraction> attractions() {
+        return this.publicService.getAllAttractions();
     }
 
-    @GetMapping("/attraction")
-    public Optional<Attraction> attraction() {
-        return this.publicService.getAttraction("test");
+    @GetMapping("/attraction/{name}")
+    public Optional<ROAttraction> attraction(@PathVariable String name) {
+        return this.publicService.getAttraction(name);
     }
 
     @GetMapping("/attractionNames")
@@ -47,12 +45,12 @@ public class PublicGet {
 
     //Tour
     @GetMapping("/tours")
-    public Iterable<Tour> tours() {
-        return this.publicService.getTours();
+    public List<ROTour> tours() {
+        return this.publicService.getAllTours();
     }
 
-    @GetMapping("/tour/:name")
-    public Optional<Tour> tour(@PathParam("name") String name) {
+    @GetMapping("/tour/{name}")
+    public Optional<ROTour> tour(@PathVariable String name) {
         return this.publicService.getTour(name);
     }
 

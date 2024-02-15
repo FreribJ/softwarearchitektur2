@@ -1,17 +1,18 @@
 package com.hsw.birdparkmanagement.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Tour {
 
@@ -20,6 +21,11 @@ public class Tour {
     String logo;
     double price;
 
-    @OneToMany
-    List<Attraction> attractions;
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL)
+    Set<Attraction> attractions;
+
+    @JoinColumn
+    String test;
+
 }
