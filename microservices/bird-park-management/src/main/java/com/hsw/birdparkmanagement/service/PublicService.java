@@ -1,8 +1,12 @@
 package com.hsw.birdparkmanagement.service;
 
 import com.hsw.birdparkmanagement.model.database.Attraction;
+import com.hsw.birdparkmanagement.model.database.SubAttraction;
 import com.hsw.birdparkmanagement.model.database.Tour;
+import com.hsw.birdparkmanagement.model.ui.ROAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROMetadata;
+import com.hsw.birdparkmanagement.model.ui.ROSubAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROTour;
 import com.hsw.birdparkmanagement.repository.AttractionRepository;
 import com.hsw.birdparkmanagement.repository.MetadataRepository;
 import com.hsw.birdparkmanagement.repository.TourRepository;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PublicService {
@@ -43,7 +48,6 @@ public class PublicService {
                 case "address":
                     metadata.setAddress(data.getValue());
                     break;
-
             }
         });
         return metadata;
@@ -51,26 +55,27 @@ public class PublicService {
 
 
     //Attractions
-    public Iterable<Attraction> getAllAttractions() {
-//        List<ROAttraction> attractions = new ArrayList<ROAttraction>();
-//        this.attractionRepository.findAll().forEach(attraction -> {
-//            ROAttraction roAttraction = new ROAttraction(attraction);
-//            roAttraction.setNearestTourNames(this.attractionRepository.getNearestTourNames(attraction.getName()));
-//            attractions.add(roAttraction);
-//        });
-//        return attractions;
-        return this.attractionRepository.findAll();
+    private ROAttraction convertAttraction(Attraction attraction) {
+        if (attraction == null) {
+            return null;
+        }
+        List<String> nearestTourNames = this.tourRepository.findAllByAttractionName(attraction.getName());
+        return ROAttraction.builder()
+                .name(attraction.getName())
+                .logo(attraction.getLogo())
+                .tags(attraction.getTags())
+                .description(attraction.getDescription())
+                .nearestTourNames(nearestTourNames).build();
     }
 
-    public Optional<Attraction> getAttraction(String name) {
-//        Attraction attraction = this.attractionRepository.findById(name).orElse(null);
-//        if (attraction == null) {
-//            return Optional.empty();
-//        }
-//        ROAttraction roAttraction = new ROAttraction(attraction);
-//        roAttraction.setNearestTourNames(this.attractionRepository.getNearestTourNames(name));
-//        return Optional.of(roAttraction);
-        return this.attractionRepository.findById(name);
+    //TODO: Mit ResponeEntity ausprobieren
+    public List<ROAttraction> getAllAttractions() {
+        return this.attractionRepository.findAll().stream().map(this::convertAttraction
+        ).collect(Collectors.toList());
+    }
+
+    public ROAttraction getAttraction(String name) {
+        return this.convertAttraction(this.attractionRepository.findById(name).orElse(null));
     }
 
     public List<String> getAttractionNames() {
@@ -79,33 +84,38 @@ public class PublicService {
 
 
     //Tours
-    public List<Tour> getAllTours() {
-//        List<ROTour> tours = new ArrayList<ROTour>();
-//        this.tourRepository.findAll().forEach(tour -> {
-//            ROTour roTour = new ROTour(tour);
-////            roTour.setAttractionNames(this.tourRepository.getAttractions(tour.getName()));
-//            tours.add(roTour);
-//        });
-//        return tours;
-        return this.tourRepository.findAll();
+    private ROSubAttraction convertSubAttraction(SubAttraction subAttraction) {
+        if (subAttraction == null) {
+            return null;
+        }
+        return ROSubAttraction.builder()
+                .end(subAttraction.getEndtime())
+                .begin(subAttraction.getStarttime())
+                .attraction(subAttraction.getAttraction().getName()).build();
     }
 
-    public Optional<Tour> getTour(String name) {
-//        Tour tour = this.tourRepository.findById(name).orElse(null);
-//        if (tour == null) {
-//            return Optional.empty();
-//        }
-//        ROTour roTour = new ROTour(tour);
-////        roTour.setAttractionNames(this.tourRepository.getAttractions(name));
-//        return Optional.of(roTour);
-        return this.tourRepository.findById(name);
+    private ROTour convertTour(Tour tour) {
+        if (tour == null) {
+            return null;
+        }
+        return ROTour.builder()
+                .name(tour.getName())
+                .logo(tour.getLogo())
+                .price(tour.getPrice())
+                .description(tour.getDescription())
+                .attractions(tour.getSubAttractions().stream().map(this::convertSubAttraction).collect(Collectors.toList())).build();
+    }
+
+    public List<ROTour> getAllTours() {
+        return this.tourRepository.findAll().stream().map(this::convertTour
+        ).collect(Collectors.toList());
+    }
+
+    public ROTour getTour(String name) {
+        return this.convertTour(this.tourRepository.findById(name).orElse(null));
     }
 
     public List<String> getTourNames() {
         return this.tourRepository.getTourNames();
-    }
-
-    public String test() {
-        return "test";
     }
 }

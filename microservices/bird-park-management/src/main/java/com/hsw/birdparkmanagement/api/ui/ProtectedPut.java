@@ -12,25 +12,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProtectedPut {
 
-    PrivateService privateService;
-
-    @Autowired
-    public ProtectedPut(PrivateService privateService) {
-        this.privateService = privateService;
-    }
-
-//    @PutMapping("/tour/{name}")
-//    public void modifyTour(@PathVariable String name, @RequestBody ROTour rotour) {
-//        this.privateService.updateTour(name, rotour);
+//    PrivateService privateService;
+//
+//    @Autowired
+//    public ProtectedPut(PrivateService privateService) {
+//        this.privateService = privateService;
 //    }
-
-    @PutMapping("/attraction/{name}")
-    public void modifyAttraction(@PathVariable String name, @RequestBody ROAttraction roattraction) {
-        this.privateService.updateAttraction(name, roattraction);
-    }
-
-    @PutMapping("/metadata")
-    public void modifyMetadata(@RequestBody ROMetadata roMetadata) {
-        this.privateService.updateMetadata(roMetadata);
-    }
+//
+////    @PutMapping("/tour/{name}")
+////    public void modifyTour(@PathVariable String name, @RequestBody ROTour rotour) {
+////        this.privateService.updateTour(name, rotour);
+////    }
+//
+//    @PutMapping("/attraction/{name}")
+//    public void modifyAttraction(@PathVariable String name, @RequestBody ROAttraction roattraction) {
+//        this.privateService.updateAttraction(name, roattraction);
+//    }
+//
+//    @PutMapping("/metadata")
+//    public void modifyMetadata(@RequestBody ROMetadata roMetadata) {
+//        this.privateService.updateMetadata(roMetadata);
+//    }
 }

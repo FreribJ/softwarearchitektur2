@@ -10,20 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ProtectedPost {
-
-    PrivateService privateService;
-
-    @Autowired
-    public ProtectedPost(PrivateService privateService) {
-        this.privateService = privateService;
-    }
-
-    @PostMapping("/attraction")
-    public void createAttraction(@RequestBody Attraction attraction) {
-        this.privateService.createAttraction(attraction);
-    }
-    @PostMapping("/tour")
-    public void createTour(@RequestBody Tour tour) {
-        this.privateService.createTour(tour);
-    }
+//
+//    PrivateService privateService;
+//
+//    @Autowired
+//    public ProtectedPost(PrivateService privateService) {
+//        this.privateService = privateService;
+//    }
+//
+//    @PostMapping("/attraction")
+//    public void createAttraction(@RequestBody Attraction attraction) {
+//        this.privateService.createAttraction(attraction);
+//    }
+//    @PostMapping("/tour")
+//    public void createTour(@RequestBody Tour tour) {
+//        this.privateService.createTour(tour);
+//    }
 }

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hsw.birdparkmanagement.model.ui.ROAttraction;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,17 +15,12 @@ import java.util.Set;
 
 
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 public class Attraction {
-
-    public Attraction(ROAttraction roAttraction) {
-        this.name = roAttraction.getName();
-        this.logo = roAttraction.getLogo();
-        this.tags = roAttraction.getTags();
-        this.description = roAttraction.getDescription();
-    }
 
     @Id
     String name;
@@ -33,9 +30,6 @@ public class Attraction {
     @ElementCollection
     List<String> tags;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("subAttractions")
-    Set<Tour> nearestTours;
 
     String description;
 

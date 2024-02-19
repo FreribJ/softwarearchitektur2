@@ -2,7 +2,9 @@ package com.hsw.birdparkmanagement.api.ui;
 
 import com.hsw.birdparkmanagement.model.database.Attraction;
 import com.hsw.birdparkmanagement.model.database.Tour;
+import com.hsw.birdparkmanagement.model.ui.ROAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROMetadata;
+import com.hsw.birdparkmanagement.model.ui.ROTour;
 import com.hsw.birdparkmanagement.service.PublicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,12 +34,12 @@ public class PublicGet {
 
     //Attraction
     @GetMapping("/attractions")
-    public Iterable<Attraction> attractions() {
+    public List<ROAttraction> attractions() {
         return this.publicService.getAllAttractions();
     }
 
     @GetMapping("/attraction/{name}")
-    public Optional<Attraction> attraction(@PathVariable String name) {
+    public ROAttraction attraction(@PathVariable String name) {
         return this.publicService.getAttraction(name);
     }
 
@@ -48,22 +50,17 @@ public class PublicGet {
 
     //Tour
     @GetMapping("/tours")
-    public List<Tour> tours() {
+    public List<ROTour> tours() {
         return this.publicService.getAllTours();
     }
 
     @GetMapping("/tour/{name}")
-    public Optional<Tour> tour(@PathVariable String name) {
+    public ROTour tour(@PathVariable String name) {
         return this.publicService.getTour(name);
     }
 
     @GetMapping("/tourNames")
     public List<String> tourNames() {
         return this.publicService.getTourNames();
-    }
-
-    @GetMapping("/test")
-    public String test() {
-        return this.publicService.test();
     }
 }

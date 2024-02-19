@@ -6,7 +6,7 @@ import lombok.Data;
 public class ROMetadata {
     static class Price {
         String category;
-        int price;
+        double price;
     }
 
     static class OpeningHour {

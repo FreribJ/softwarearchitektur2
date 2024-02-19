@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProtectedDelete {
 
-    PrivateService privateService;
-
-    @Autowired
-    public ProtectedDelete(PrivateService privateService) {
-        this.privateService = privateService;
-    }
-
-    @DeleteMapping("/tour/{name}")
-    public void deleteTour(@PathVariable String name) {
-        this.privateService.deleteTour(name);
-    }
-
-    @DeleteMapping("/attraction/{name}")
-    public void deleteAttraction(@PathVariable String name) {
-        this.privateService.deleteAttraction(name);
-    }
+//    PrivateService privateService;
+//
+//    @Autowired
+//    public ProtectedDelete(PrivateService privateService) {
+//        this.privateService = privateService;
+//    }
+//
+//    @DeleteMapping("/tour/{name}")
+//    public void deleteTour(@PathVariable String name) {
+//        this.privateService.deleteTour(name);
+//    }
+//
+//    @DeleteMapping("/attraction/{name}")
+//    public void deleteAttraction(@PathVariable String name) {
+//        this.privateService.deleteAttraction(name);
+//    }
 }

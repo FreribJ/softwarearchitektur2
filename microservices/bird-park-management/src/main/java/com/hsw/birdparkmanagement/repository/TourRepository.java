@@ -14,6 +14,10 @@ public interface TourRepository extends JpaRepository<Tour, String> {
     @Query(value = "update tour set name = ?2 where name = ?1", nativeQuery = true)
     void updateName(String oldName, String newName);
 
-    @Query(value = "select attractions_name from tour_attractions where tour_name = ?1" , nativeQuery = true)
-    List<String> getAttractions(String tourName);
+//    @Query(value = "select attractions_name from tour_attractions where tour_name = ?1" , nativeQuery = true)
+//    List<String> getAttractions(String tourName);
+
+    @Query(value = "select tsa.tour_name from tour_sub_attractions tsa join sub_attraction sa on sa.id = tsa.sub_attractions_id where sa.attraction_name = ?1 ", nativeQuery = true)
+    List<String> findAllByAttractionName(String attractionName);
+
 }

@@ -1,11 +1,13 @@
 package com.hsw.birdparkmanagement.model.ui;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class ROSubAttraction {
 
-    String attractionName;
-    String starttime;
-    String endtime;
+    String attraction;
+    String begin;
+    String end;
 }
