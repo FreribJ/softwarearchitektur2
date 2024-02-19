@@ -1,7 +1,7 @@
 package com.hsw.birdparkmanagement.api.ui;
 
-import com.hsw.birdparkmanagement.model.Attraction;
-import com.hsw.birdparkmanagement.model.Tour;
+import com.hsw.birdparkmanagement.model.database.Attraction;
+import com.hsw.birdparkmanagement.model.database.Tour;
 import com.hsw.birdparkmanagement.service.PrivateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

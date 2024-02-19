@@ -1,9 +1,11 @@
 package com.hsw.birdparkmanagement.api.ui;
 
-import com.hsw.birdparkmanagement.model.*;
+import com.hsw.birdparkmanagement.model.database.Attraction;
+import com.hsw.birdparkmanagement.model.database.Tour;
+import com.hsw.birdparkmanagement.model.ui.ROMetadata;
 import com.hsw.birdparkmanagement.service.PublicService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = {"http://localhost/", "http://172.30.3.114/"}, maxAge = 3600)
 @RestController
 public class PublicGet {
 
@@ -29,12 +32,12 @@ public class PublicGet {
 
     //Attraction
     @GetMapping("/attractions")
-    public Iterable<ROAttraction> attractions() {
+    public Iterable<Attraction> attractions() {
         return this.publicService.getAllAttractions();
     }
 
     @GetMapping("/attraction/{name}")
-    public Optional<ROAttraction> attraction(@PathVariable String name) {
+    public Optional<Attraction> attraction(@PathVariable String name) {
         return this.publicService.getAttraction(name);
     }
 
@@ -45,12 +48,12 @@ public class PublicGet {
 
     //Tour
     @GetMapping("/tours")
-    public List<ROTour> tours() {
+    public List<Tour> tours() {
         return this.publicService.getAllTours();
     }
 
     @GetMapping("/tour/{name}")
-    public Optional<ROTour> tour(@PathVariable String name) {
+    public Optional<Tour> tour(@PathVariable String name) {
         return this.publicService.getTour(name);
     }
 
@@ -59,4 +62,8 @@ public class PublicGet {
         return this.publicService.getTourNames();
     }
 
+    @GetMapping("/test")
+    public String test() {
+        return this.publicService.test();
+    }
 }

@@ -1,9 +1,7 @@
 package com.hsw.birdparkmanagement.api.ui;
 
-import com.hsw.birdparkmanagement.model.Attraction;
-import com.hsw.birdparkmanagement.model.Metadata;
-import com.hsw.birdparkmanagement.model.ROMetadata;
-import com.hsw.birdparkmanagement.model.Tour;
+import com.hsw.birdparkmanagement.model.ui.ROAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROMetadata;
 import com.hsw.birdparkmanagement.service.PrivateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,16 +19,14 @@ public class ProtectedPut {
         this.privateService = privateService;
     }
 
-    @PutMapping("/tour/{name}")
-    public void modifyTour(@PathVariable String name, @RequestBody Tour tour) {
-        this.privateService.updateTour(name, tour);
-    }
+//    @PutMapping("/tour/{name}")
+//    public void modifyTour(@PathVariable String name, @RequestBody ROTour rotour) {
+//        this.privateService.updateTour(name, rotour);
+//    }
 
     @PutMapping("/attraction/{name}")
-    public void modifyAttraction(@PathVariable String name, @RequestBody Attraction attraction) {
-        System.out.println(name);
-        System.out.println(attraction.toString());
-        this.privateService.updateAttraction(name, attraction);
+    public void modifyAttraction(@PathVariable String name, @RequestBody ROAttraction roattraction) {
+        this.privateService.updateAttraction(name, roattraction);
     }
 
     @PutMapping("/metadata")

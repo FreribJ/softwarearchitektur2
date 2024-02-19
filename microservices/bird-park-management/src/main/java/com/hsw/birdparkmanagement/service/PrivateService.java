@@ -1,9 +1,9 @@
 package com.hsw.birdparkmanagement.service;
 
-import com.hsw.birdparkmanagement.model.Attraction;
-import com.hsw.birdparkmanagement.model.Metadata;
-import com.hsw.birdparkmanagement.model.ROMetadata;
-import com.hsw.birdparkmanagement.model.Tour;
+import com.hsw.birdparkmanagement.model.database.Attraction;
+import com.hsw.birdparkmanagement.model.database.Tour;
+import com.hsw.birdparkmanagement.model.ui.ROAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROMetadata;
 import com.hsw.birdparkmanagement.repository.AttractionRepository;
 import com.hsw.birdparkmanagement.repository.MetadataRepository;
 import com.hsw.birdparkmanagement.repository.TourRepository;
@@ -70,21 +70,35 @@ public class PrivateService {
     }
 
     //TODO: abhängige Attraktionen auch aktualisieren
-    public void updateAttraction(String name, Attraction attraction) {
+    public void updateAttraction(String name, ROAttraction roattraction) {
         if (!this.attractionRepository.existsById(name))
             throw new IllegalStateException("Attraction with name " + name + " does not exist");
+
+        Attraction attraction = new Attraction(roattraction);
+        roattraction.getNearestTourNames().forEach(tourName ->
+                this.tourRepository.findById(tourName).ifPresent(tour -> {
+                    attraction.getNearestTours().add(tour);
+                }));
+
         if (!Objects.equals(name, attraction.getName()))
             this.attractionRepository.updateName(name, attraction.getName());
         this.attractionRepository.save(attraction);
     }
 
     //TODO: abhängige Touren auch aktualisieren
-    public void updateTour(String name, Tour tour) {
-        if (!this.tourRepository.existsById(name))
-            throw new IllegalStateException("Tour with name " + name + " does not exist");
-        if (!Objects.equals(name, tour.getName()))
-            this.tourRepository.updateName(name, tour.getName());
-        this.tourRepository.save(tour);
-
-    }
+//    public void updateTour(String name, ROTour rotour) {
+//        if (!this.tourRepository.existsById(name))
+//            throw new IllegalStateException("Tour with name " + name + " does not exist");
+//
+//        Tour tour = new Tour(rotour);
+//        rotour.getSubAttractions().forEach(subAttraction ->
+//                this.attractionRepository.findById(subAttraction.getAttractionName()).ifPresent(attraction -> {
+//                    tour.getSubAttractions().add(new SubAttraction(attraction, subAttraction.getStarttime(), subAttraction.getEndtime()));
+//                }));
+//
+//        if (!Objects.equals(name, tour.getName()))
+//            this.tourRepository.updateName(name, tour.getName());
+//        this.tourRepository.save(tour);
+//
+//    }
 }
