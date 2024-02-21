@@ -6,6 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class BirdParkManagementApplicationTests {
 
+    //TODO: Add tests for the application
+
     @Test
     void contextLoads() {
     }

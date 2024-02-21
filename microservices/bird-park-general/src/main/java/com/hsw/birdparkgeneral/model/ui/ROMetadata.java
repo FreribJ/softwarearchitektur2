@@ -1,4 +1,4 @@
-package com.hsw.birdparkmanagement.model.ui;
+package com.hsw.birdparkgeneral.model.ui;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

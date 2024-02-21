@@ -18,8 +18,8 @@ public class SubAttraction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @JsonIgnoreProperties("nearestTours")
-    @OneToOne
+
+    @ManyToOne(cascade = CascadeType.ALL)
     Attraction attraction;
     String starttime;
     String endtime;

@@ -31,6 +31,6 @@ public class Tour {
     String description;
     double price;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL) //TODO: , orphanRemoval = true testen optional [notNull] = true;; Eine seite Braucht mapped by, die andere @JoinColumn
     List<SubAttraction> subAttractions;
 }

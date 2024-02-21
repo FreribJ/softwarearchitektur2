@@ -1,5 +1,7 @@
 package com.hsw.birdparkmanagement.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hsw.birdparkmanagement.model.database.Attraction;
 import com.hsw.birdparkmanagement.model.database.SubAttraction;
 import com.hsw.birdparkmanagement.model.database.Tour;
@@ -13,6 +15,7 @@ import com.hsw.birdparkmanagement.repository.TourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,10 +34,21 @@ public class PublicService {
         this.tourRepository = tourRepository;
     }
 
+
+    private <T> T convertToJsonNode(String value, Class<T> targetType) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.treeToValue(mapper.readTree(value), targetType);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
     public ROMetadata getMetadata() {
         ROMetadata metadata = new ROMetadata();
 
-        this.metadataRepository.findAll().forEach(data -> {
+        this    .metadataRepository.findAll().forEach(data -> {
             switch (data.getName()) {
                 case "name":
                     metadata.setName(data.getValue());
@@ -47,6 +61,12 @@ public class PublicService {
                     break;
                 case "address":
                     metadata.setAddress(data.getValue());
+                    break;
+                case "openingHours":
+                    metadata.setOpeningHours(this.convertToJsonNode(data.getValue(), ROMetadata.OpeningHour[].class));
+                    break;
+                case "prices":
+                    metadata.setPrices(this.convertToJsonNode(data.getValue(), ROMetadata.Price[].class));
                     break;
             }
         });

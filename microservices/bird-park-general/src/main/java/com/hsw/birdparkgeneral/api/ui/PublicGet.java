@@ -1,16 +1,16 @@
-package com.hsw.birdparkmanagement.api.ui;
+package com.hsw.birdparkgeneral.api.ui;
 
-import com.hsw.birdparkmanagement.model.database.Attraction;
-import com.hsw.birdparkmanagement.model.database.Tour;
-import com.hsw.birdparkmanagement.model.ui.ROAttraction;
-import com.hsw.birdparkmanagement.model.ui.ROMetadata;
-import com.hsw.birdparkmanagement.model.ui.ROTour;
-import com.hsw.birdparkmanagement.service.PublicService;
+import com.hsw.birdparkgeneral.model.ui.ROAttraction;
+import com.hsw.birdparkgeneral.model.ui.ROMetadata;
+import com.hsw.birdparkgeneral.service.PublicService;
+import com.hsw.birdparkgeneral.model.ui.ROTour;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = {"http://localhost:8080/", "http://192.168.0.196/"}, maxAge = 3600)
 @RestController

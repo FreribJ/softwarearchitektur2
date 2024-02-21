@@ -11,6 +11,6 @@ import java.util.List;
 public class Metadata {
     @Id
     String name;
-    String value;
     String type;
+    String value;
 }
