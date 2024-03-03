@@ -1,0 +1,19 @@
+<div *ngIf="error" class="container">
+  <mat-icon>error</mat-icon>
+  <div >Fehler beim Laden der Attraktionen</div>
+</div>
+<h1 *ngIf="!this.tours &&!error" class="container">loading
+  <mat-spinner color="access"></mat-spinner>
+</h1>
+<div class="container" *ngIf="this.tours?.length!= 0; else elseBlock">
+  <div *ngFor="let tour of this.tours;" >
+<app-tour-overview [tour]=tour>
+  <a [routerLink]="['/tour-overview',this.tour?.name]" class="link"> </a>
+</app-tour-overview>
+  </div>
+</div>
+<ng-template #elseBlock>
+  <div class="container" *ngIf="!this.error">
+    <div class="headline">Keine Touren vorhanden</div>
+  </div>
+</ng-template>

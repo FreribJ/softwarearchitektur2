@@ -1,0 +1,23 @@
+<p>
+  <mat-toolbar class="test">
+
+    <a [routerLink]="'./'">
+      <button mat-button> Startseite</button>
+    </a>
+    <a [routerLink]="'./attractions'">
+      <button mat-raised-button color="accent">Attraktionen</button>
+    </a>
+    <a [routerLink]="'./tours'">
+      <button mat-raised-button color="accent">Tours</button>
+
+    </a>
+    <mat-radio-group aria-label="Select an option">
+      <mat-radio-button value="1" checked="true" (change)="toggleClick()"> Besucher Modus
+      </mat-radio-button>
+      <mat-radio-button value="2" (change)="toggleClick()">Direktor-Modus
+      </mat-radio-button>
+    </mat-radio-group>
+  </mat-toolbar>
+</p>
+
+<router-outlet/>

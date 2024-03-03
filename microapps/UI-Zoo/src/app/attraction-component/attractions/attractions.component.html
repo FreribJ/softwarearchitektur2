@@ -1,0 +1,44 @@
+<h1 *ngIf="this.showList.length == 0 &&!error&& this.showList==this.attractions" class="container">loading
+  <mat-spinner color="access"></mat-spinner>
+</h1>
+
+<div class="grid">
+  <div *ngIf="this.tagListe?.length!=0" class="liste">
+    <mat-chip-listbox [multiple]="true">
+      <div class="menu" *ngFor="let chip of this.tagListe">
+
+
+        <span class="chip">
+        <mat-chip-option color="accent" [selected]="isSelected(chip)" class="chip" (click)="toggleSelection(chip)">
+          {{ chip }}
+        </mat-chip-option>
+        </span>
+      </div>
+    </mat-chip-listbox>
+    <button *ngIf="this.showList==this.attractions" mat-raised-button color="primary" (click)="filtern()">Filter</button>
+    <button *ngIf="this.showList!=this.attractions" mat-raised-button color="warn" (click)="loeschen()"><mat-icon>delete</mat-icon></button>
+  </div>
+
+
+  <div *ngIf="error" class="container">
+    <mat-icon>error</mat-icon>
+    <div>Fehler beim Laden der Attraktionen</div>
+  </div>
+
+
+
+  <div class="container" *ngIf="this.showList.length!= 0 && !this.error; else elseBlock">
+
+    <div *ngFor="let attraction of this.showList;">
+      <app-attraction-overview [attraction]="attraction">
+        <a [routerLink]="['/attraction-overview',this.attraction?.name]" class="link"> </a>
+      </app-attraction-overview>
+    </div>
+  </div>
+</div>
+
+<ng-template #elseBlock>
+  <div class="headline" *ngIf="!this.error">
+    <div class="headline"> Keine Attraktionen gefunden</div>
+  </div>
+</ng-template>

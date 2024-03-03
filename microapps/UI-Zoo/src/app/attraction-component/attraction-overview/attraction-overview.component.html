@@ -1,0 +1,53 @@
+<div *ngIf="error" class="container">
+  <mat-icon >error</mat-icon>
+  <div >Fehler beim Laden der Attraktion</div>
+</div>
+
+<h1 *ngIf="!this.attraction &&!error;" class="container">loading
+  <mat-spinner color="access"></mat-spinner>
+</h1>
+
+<div *ngIf="!this.error && this.attraction; else elseBlock" class="container">
+<div class="tile">
+  <a [routerLink]="['/attraction-overview',this.attraction?.name]" class="link">
+    <div class="headline">{{ this.attraction?.name }}
+      <span *ngIf="direktorModus==true">
+         <mat-icon class="rechts">
+               <a [routerLink]="['']" class="link">
+  edit</a>
+         </mat-icon>
+       </span>
+    </div>
+
+    <div *ngIf="this.attraction?.logo"><img [src]="this.attraction?.logo" class="image"></div>
+    <div *ngIf="this.attraction?.description" class="padding">
+      {{ this.attraction?.description }}
+    </div>
+
+    <div *ngIf="this.attraction?.nearestTourNames?.length!=0">
+      Besuchbar bei folgenden Touren:
+      <mat-chip-listbox *ngFor="let attraction of this.attraction?.nearestTourNames;">
+        <a [routerLink]="['/tour-overview',attraction]" class="priorisieren">
+          <mat-chip color="accent"
+          >
+            {{ attraction }}
+          </mat-chip>
+        </a>
+      </mat-chip-listbox>
+    </div>
+
+    <div *ngIf="this.attraction?.tags?.length!= 0" class="padding">
+      Tags:
+      <mat-chip-listbox>
+        <mat-chip color="accent" *ngFor="let tag of this.attraction?.tags;">
+          {{ tag }}
+        </mat-chip>
+      </mat-chip-listbox>
+    </div>
+  </a>
+</div>
+  </div>
+
+<ng-template #elseBlock>
+  <div class="headline" *ngIf="!this.error">Keine Attraktion gefunden</div>
+</ng-template>

@@ -1,0 +1,45 @@
+<div *ngIf="error" class="container">
+  <mat-icon >error</mat-icon>
+  <div class="error">Fehler beim Laden der Metadaten</div>
+</div>
+<h1 *ngIf="!this.data &&!error" class="container">loading
+  <mat-spinner color="access"></mat-spinner>
+</h1>
+
+
+<div *ngIf="this.data&& !this.error ; else elseBlock">
+  <div class="container">
+
+    <div class="tile2">
+
+      <span *ngIf="direktorModus==true">
+         <a [routerLink]="['/editMetadata']" class="link" ><mat-icon class="rechts">edit</mat-icon></a>
+       </span>
+      <img [src]="this.data.logo" class="image">
+    </div>
+    <div class="tile">
+
+      <div><span *ngIf="direktorModus">
+        <a [routerLink]="['/editMetadata']" class="link"><mat-icon class="rechts">edit</mat-icon></a>
+       </span>
+        <h1 class="headline" *ngIf="this.data.name"> Wilkommen beim {{ this.data.name }}! </h1>
+        <div class="padding" *ngIf="this.data.address"> {{ this.data.address }}</div>
+        <div class="padding" *ngIf="this.data.description"> {{ this.data.description }}</div>
+        <div class="padding">Wir haben offen:</div>
+        <div *ngFor="let zeiten of this.data.openingHours">
+          <div> {{ zeiten.weekday?  zeiten.weekday+": " : "" }}{{ zeiten.hours?  zeiten.hours : "" }}  {{ zeiten.info ? "-- " + zeiten.info : "" }}</div>
+        </div>
+        <div class="padding-top">Preise:</div>
+        <div *ngFor="let price of this.data.prices">
+          <div> {{ price.category }}: {{ price.price }}€</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<ng-template #elseBlock >
+  <div class="container" *ngIf="this.error">
+    <div class="headline">Startseite nicht aufrufbar</div>
+  </div>
+</ng-template>
