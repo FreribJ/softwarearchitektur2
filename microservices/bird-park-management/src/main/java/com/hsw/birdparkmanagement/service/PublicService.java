@@ -48,7 +48,7 @@ public class PublicService {
     public ROMetadata getMetadata() {
         ROMetadata metadata = new ROMetadata();
 
-        this    .metadataRepository.findAll().forEach(data -> {
+        this.metadataRepository.findAll().forEach(data -> {
             switch (data.getName()) {
                 case "name":
                     metadata.setName(data.getValue());

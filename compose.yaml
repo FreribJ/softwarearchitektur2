@@ -1,0 +1,62 @@
+#TODO: Alle Datenbanken, Services und Microapps in ein Dockerfile abspeichern, damit die Anwendung allein durch Docker compose startet.
+services:
+  visitor-microapp:
+    build:
+      context: ./microapps/UI-Zoo
+    ports:
+      - "80:4200"
+    depends_on:
+      - visitor-microservice
+    networks:
+      - bird-network
+
+  visitor-microservice:
+    build:
+      context: ./microservices/bird-park-general
+    ports:
+      - "8080:8080"
+    depends_on:
+      - management-microservice
+    networks:
+      - bird-network
+
+  management-microapp:
+    build:
+      context: ./microapps/Zoo-Management
+    ports:
+      - "81:4201"
+    depends_on:
+      - management-microservice
+    networks:
+      - bird-network
+
+  management-microservice:
+    build:
+      context: ./microservices/bird-park-management
+    ports:
+      - "8081:8081"
+    depends_on:
+      - database
+    networks:
+      - bird-network
+
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    volumes:
+      - bird-volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - bird-network
+
+volumes:
+  bird-volume:
+    driver: local
+
+networks:
+  bird-network:
+    driver: bridge

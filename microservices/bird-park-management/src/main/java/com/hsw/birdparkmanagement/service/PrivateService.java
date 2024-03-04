@@ -31,6 +31,18 @@ public class PrivateService {
         this.tourRepository = tourRepository;
         this.metadataRepository = metadataRepository;
         this.mapper = new ObjectMapper();
+
+        //Initial Database setup
+        if (this.metadataRepository.count() == 0) {
+            this.updateMetadata(ROMetadata.builder()
+                    .name("Bird Park HSW")
+                    .address("Am Stockhof 2, 31785 Hameln")
+                    .description("Welcome to the Bird Park")
+                    .logo("https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Hochschule_Weserbergland_logo.svg/2560px-Hochschule_Weserbergland_logo.svg.png")
+                    .prices(new ROMetadata.Price[]{new ROMetadata.Price("Adult", 20.0), new ROMetadata.Price("Child", 10.0)})
+                    .openingHours(new ROMetadata.OpeningHour[]{new ROMetadata.OpeningHour("Wochentag", "9:00 - 18:00", "Außer an Feiertagen"), new ROMetadata.OpeningHour("Wochenende", "9:00 - 18:00", "")})
+                    .build());
+        }
     }
 
     public void createAttraction(ROAttraction roattraction) {

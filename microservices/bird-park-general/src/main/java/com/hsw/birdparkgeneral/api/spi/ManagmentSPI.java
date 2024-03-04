@@ -17,7 +17,7 @@ public class ManagmentSPI {
 
     //Hier könnte jetzt quasi ein Token mitgegeben werden, um sich beim Backend zu authentifizieren
 
-    final String host = "http://localhost:8080/";
+    final String host = "http://192.168.178.51:8081/";
     RestTemplate restTemplate = new RestTemplate();
 
 
