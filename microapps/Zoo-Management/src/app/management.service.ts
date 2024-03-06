@@ -6,7 +6,7 @@ import {Attraction, Metadata, Tour} from "./entites";
   providedIn: 'root'
 })
 export class ManagementService {
-  host = "http://192.168.0.215";
+  host = "http://localhost";
   port = ":8080";
   ad="9"
   constructor(private http: HttpClient) {

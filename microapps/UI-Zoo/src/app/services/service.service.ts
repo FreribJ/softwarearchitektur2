@@ -7,7 +7,7 @@ import {BehaviorSubject, fromEvent, Observable} from "rxjs";
   providedIn: 'root'
 })
 export class ServiceService {
-  host = "http://192.168.0.215";
+  host = "http://localhost";
   port = ":8080";
   modus = new BehaviorSubject<boolean>(false);
   modus$ = this.modus.asObservable();
