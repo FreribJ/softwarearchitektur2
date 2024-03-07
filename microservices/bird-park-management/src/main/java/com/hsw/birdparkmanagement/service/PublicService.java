@@ -51,7 +51,7 @@ public class PublicService {
         this.metadataRepository.findAll().forEach(data -> {
             switch (data.getName()) {
                 case "name":
-                    metadata.setName(data.getValue());
+                    metadata.setName(data.getValue() + "TEST");
                     break;
                 case "description":
                     metadata.setDescription(data.getValue());

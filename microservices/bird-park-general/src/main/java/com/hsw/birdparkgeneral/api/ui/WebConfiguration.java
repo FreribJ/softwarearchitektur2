@@ -1,4 +1,4 @@
-package com.hsw.birdparkmanagement.api.ui;
+package com.hsw.birdparkgeneral.api.ui;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -10,7 +10,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:81")
+                .allowedOrigins("http://localhost")
                 .allowedMethods("*")
                 .allowCredentials(true);
     }
