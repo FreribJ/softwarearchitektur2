@@ -14,7 +14,7 @@ services:
     build:
       context: ./microapps/UI-Zoo
     ports:
-      - "80:4200"
+      - "80:80"
     depends_on:
       - visitor-microservice
 
@@ -30,7 +30,7 @@ services:
     build:
       context: ./microapps/Zoo-Management
     ports:
-      - "81:4201"
+      - "81:81"
     depends_on:
       - management-microservice
 

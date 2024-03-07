@@ -8,7 +8,6 @@ public class BirdParkManagementApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BirdParkManagementApplication.class, args);
-        System.out.println("Hello World!");
     }
 
 }

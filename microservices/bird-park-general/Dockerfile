@@ -6,6 +6,7 @@ RUN mvn install
 
 # Stage 2: Copy the JAR file from the builder stage
 FROM eclipse-temurin:21-jdk-alpine
+WORKDIR /app
 COPY --from=builder /target/bird-park-general-1.2.1.jar app.jar
 EXPOSE 1324
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","/app/app.jar"]
