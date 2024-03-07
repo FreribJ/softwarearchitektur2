@@ -2,6 +2,7 @@ package com.hsw.birdparkmanagement.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hsw.birdparkmanagement.model.database.Attraction;
+import com.hsw.birdparkmanagement.model.database.Metadata;
 import com.hsw.birdparkmanagement.model.database.SubAttraction;
 import com.hsw.birdparkmanagement.model.database.Tour;
 import com.hsw.birdparkmanagement.model.ui.ROAttraction;
@@ -12,8 +13,12 @@ import com.hsw.birdparkmanagement.repository.MetadataRepository;
 import com.hsw.birdparkmanagement.repository.TourRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Meta;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -33,15 +38,17 @@ public class PrivateService {
         this.mapper = new ObjectMapper();
 
         //Initial Database setup
+        System.out.println(this.metadataRepository.count());
         if (this.metadataRepository.count() == 0) {
-            this.updateMetadata(ROMetadata.builder()
-                    .name("Bird Park HSW")
-                    .address("Am Stockhof 2, 31785 Hameln")
-                    .description("Welcome to the Bird Park")
-                    .logo("https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Hochschule_Weserbergland_logo.svg/2560px-Hochschule_Weserbergland_logo.svg.png")
-                    .prices(new ROMetadata.Price[]{new ROMetadata.Price("Adult", 20.0), new ROMetadata.Price("Child", 10.0)})
-                    .openingHours(new ROMetadata.OpeningHour[]{new ROMetadata.OpeningHour("Wochentag", "9:00 - 18:00", "Außer an Feiertagen"), new ROMetadata.OpeningHour("Wochenende", "9:00 - 18:00", "")})
-                    .build());
+            List<Metadata> metadata = new ArrayList<>();
+            metadata.add(Metadata.builder().name("name").type("String").value("Bird Park HSW").build());
+            metadata.add(Metadata.builder().name("description").type("String").value("Welcome to the Bird Park").build());
+            metadata.add(Metadata.builder().name("logo").type("String").value("https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Hochschule_Weserbergland_logo.svg/2560px-Hochschule_Weserbergland_logo.svg.png").build());
+            metadata.add(Metadata.builder().name("address").type("String").value("Am Stockhof 2, 31785 Hameln").build());
+            metadata.add(Metadata.builder().name("prices").type("JSON").value("[{\"category\":\"Adult\",\"price\":20.0},{\"category\":\"Child\",\"price\":10.0}]").build());
+            metadata.add(Metadata.builder().name("openingHours").type("JSON").value("[{\"weekday\":\"Wochentag\",\"hours\":\"9:00 - 18:00\",\"info\":\"Außer an Feiertagen\"},{\"weekday\":\"Wochenende\",\"hours\":\"9:00 - 18:00\",\"info\":\"\"}]").build());
+
+            this.metadataRepository.saveAll(metadata);
         }
     }
 

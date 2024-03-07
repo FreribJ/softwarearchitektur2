@@ -6,4 +6,4 @@ RUN npm run build
 
 FROM nginx:latest
 COPY --from=build /app/dist/zoo-management/browser /usr/share/nginx/html
-EXPOSE 81
+EXPOSE 80

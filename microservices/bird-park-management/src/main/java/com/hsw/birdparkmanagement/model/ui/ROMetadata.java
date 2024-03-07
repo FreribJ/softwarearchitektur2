@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ROMetadata {
     @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
     public static class Price {
         @JsonProperty
         String category;
@@ -20,6 +22,8 @@ public class ROMetadata {
     }
 
     @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
     public static class OpeningHour {
         @JsonProperty
         String weekday;
