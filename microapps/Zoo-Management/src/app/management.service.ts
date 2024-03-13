@@ -8,7 +8,6 @@ import {Attraction, Metadata, Tour} from "./entites";
 export class ManagementService {
   host = "http://localhost";
   port = ":8081";
-  ad="9"
   constructor(private http: HttpClient) {
 
   }
@@ -36,4 +35,3 @@ export class ManagementService {
 
 
 }
-

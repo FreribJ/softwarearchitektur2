@@ -8,8 +8,8 @@
 </h1>
 <div class="container">
   <div class="tile" *ngIf="this.tour">
-    <a [routerLink]="['/tour-overview',this.tour?.name]" class="link">
-      <div class="headline">{{ this.tour?.name }}
+    <a [routerLink]="['/tour-overview',this.tour.name]" class="link">
+      <div class="headline">{{ this.tour.name }}
         <span *ngIf="direktorModus">
          <mat-icon class="rechts">
            <a [routerLink]="['']" class="link">edit
@@ -18,8 +18,8 @@
        </span>
       </div>
 
-      <div *ngIf="this.tour?.logo"><img [src]="this.tour?.logo" class="image"></div>
-      <div *ngIf="this.tour?.description">{{ this.tour?.description }}</div>
+      <div *ngIf="this.tour?.logo"><img [src]="this.tour.logo" class="image"></div>
+      <div *ngIf="this.tour?.description">{{ this.tour.description }}</div>
       <div *ngIf="this.tour?.attractions?.length != 0">
       </div>
       <div *ngIf="this.tour?.attractions?.length!=0">
@@ -36,8 +36,8 @@
       <div class="padding" *ngFor="let attraction of this.tour?.attractions;">
         {{ attraction ? attraction.attraction + " wird besucht von:" + attraction.begin + "-" + attraction.end : "keine Zeitangabe" }}
       </div>
-      <div *ngIf="this.tour?.price">
-        Preis: {{ this.tour?.price }}€
+      <div *ngIf="this.tour.price">
+        Preis: {{ this.tour.price }}€
       </div>
     </a>
   </div>

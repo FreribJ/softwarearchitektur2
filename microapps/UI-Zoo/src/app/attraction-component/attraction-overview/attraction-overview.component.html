@@ -9,8 +9,8 @@
 
 <div *ngIf="!this.error && this.attraction; else elseBlock" class="container">
 <div class="tile">
-  <a [routerLink]="['/attraction-overview',this.attraction?.name]" class="link">
-    <div class="headline">{{ this.attraction?.name }}
+  <a [routerLink]="['/attraction-overview',this.attraction.name]" class="link">
+    <div class="headline">{{ this.attraction.name }}
       <span *ngIf="direktorModus==true">
          <mat-icon class="rechts">
                <a [routerLink]="['']" class="link">
@@ -19,9 +19,9 @@
        </span>
     </div>
 
-    <div *ngIf="this.attraction?.logo"><img [src]="this.attraction?.logo" class="image"></div>
+    <div *ngIf="this.attraction.logo"><img [src]="this.attraction.logo" class="image"></div>
     <div *ngIf="this.attraction?.description" class="padding">
-      {{ this.attraction?.description }}
+      {{ this.attraction.description }}
     </div>
 
     <div *ngIf="this.attraction?.nearestTourNames?.length!=0">
