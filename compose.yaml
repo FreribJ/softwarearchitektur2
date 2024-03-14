@@ -30,7 +30,7 @@ services:
     build:
       context: ./microapps/Zoo-Management
     ports:
-      - "81:80"
+      - "81:81"
     depends_on:
       - management-microservice
 
