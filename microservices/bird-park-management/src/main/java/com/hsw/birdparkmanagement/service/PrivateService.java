@@ -38,7 +38,6 @@ public class PrivateService {
         this.mapper = new ObjectMapper();
 
         //Initial Database setup
-        System.out.println(this.metadataRepository.count());
         if (this.metadataRepository.count() == 0) {
             List<Metadata> metadata = new ArrayList<>();
             metadata.add(Metadata.builder().name("name").type("String").value("Bird Park HSW").build());
@@ -68,8 +67,6 @@ public class PrivateService {
     public void createTour(ROTour rotour) {
         if (this.tourRepository.existsById(rotour.getName()))
             throw new IllegalStateException("Tour with name " + rotour.getName() + " already exists");
-
-        System.out.println(rotour.toString());
 
         Tour tour = Tour.builder()
                 .name(rotour.getName())

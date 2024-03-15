@@ -40,7 +40,6 @@ public class PublicService {
         try {
             return mapper.treeToValue(mapper.readTree(value), targetType);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return null;
         }
     }
