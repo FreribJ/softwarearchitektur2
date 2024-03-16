@@ -1,0 +1,63 @@
+<div *ngIf="this.loading">
+  Loading...
+  <mat-spinner color="access"></mat-spinner>
+</div>
+
+<div class="container">
+  <div>
+    <div *ngIf="this.tourForm" class="tile">
+      <h2>Die Attraktion ändern</h2><br>
+
+      <form [formGroup]="this.tourForm" class="example-form" (ngSubmit)="onSubmit()">
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name" placeholder="Name">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>description</mat-label>
+            <textarea matInput type="text" formControlName="description" placeholder="Beschreibung" cdkTextareaAutosize ></textarea>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>Logo</mat-label>
+            <textarea matInput type="text" formControlName="logo" placeholder="Logo" cdkTextareaAutosize>   </textarea>
+          </mat-form-field>
+        </div>
+        <img src="this.metadataForm.get('logo')?.value">
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>price</mat-label>
+            <input matInput type="number" formControlName="description" placeholder="price" cdkTextareaAutosize >
+          </mat-form-field>
+        </div>
+
+        <div *ngFor="let attraction of getAttractionsControls(); let i = index">
+
+          <mat-form-field class="example-full-width">
+            <mat-label>Tag</mat-label>
+            <input matInput type="text"  placeholder="Name" [value]="attraction.get('attraction')?.value">
+          </mat-form-field>
+          <mat-label>Tag</mat-label>
+          <mat-form-field class="example-full-width">
+          <input matInput type="text"  placeholder="Beginn" [value]="attraction.get('begin')?.value">
+          </mat-form-field>
+          <mat-label>Tag</mat-label>
+          <mat-form-field class="example-full-width">
+          <input matInput type="text"  placeholder="Ende" [value]="attraction.get('end')?.value">
+          </mat-form-field>
+          <button mat-raised-button color="warn" (click)="deleteAttraction(i)" class="delete-button">Delete</button>
+        </div>
+        <button mat-raised-button color="accent" type="button" (click)="addAttraction()" class="delete-button">Add Attraction</button>
+
+
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="!tourForm.valid">Ändern</button>
+      </form>
+    </div>
+  </div>
+</div>
+<router-outlet/>

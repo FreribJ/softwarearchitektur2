@@ -1,0 +1,58 @@
+<div *ngIf="this.loading">
+  Loading...
+  <mat-spinner color="access"></mat-spinner>
+</div>
+
+<div class="container">
+  <div>
+    <div *ngIf="this.attractionForm" class="tile">
+      <h2>Die Attraktion ändern</h2><br>
+
+      <form [formGroup]="this.attractionForm" class="example-form" (ngSubmit)="onSubmit()">
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name" placeholder="Name">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>description</mat-label>
+            <textarea matInput type="text" formControlName="description" placeholder="Beschreibung" cdkTextareaAutosize ></textarea>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>Logo</mat-label>
+            <textarea matInput type="text" formControlName="logo" placeholder="Logo" cdkTextareaAutosize>   </textarea>
+          </mat-form-field>
+        </div>
+        <img src="this.metadataForm.get('logo')?.value">
+
+
+        <div *ngFor="let tour of getToursControls(); let i = index">
+
+          <mat-form-field class="example-full-width">
+            <mat-label>Tag</mat-label>
+            <input matInput type="text"  placeholder="Name" [value]="tour.get('tourName')?.value">
+          </mat-form-field>
+          <button mat-raised-button color="warn" (click)="deleteTour(i)" class="delete-button">Delete</button>
+        </div>
+        <button mat-raised-button color="accent" type="button" (click)="addTour()" class="delete-button">Add Tour</button>
+
+          <div *ngFor="let tag of getTagsControls(); let i = index">
+            <mat-form-field class="example-full-width">
+              <mat-label>Kategorie</mat-label>
+              <input matInput type="text"  placeholder="Kategorie" [value]="tag.get('tagName')?.value">
+            </mat-form-field>
+
+            <button mat-raised-button color="warn" type="button" (click)="deleteTag(i)" class="delete-button">Delete</button>
+          </div>
+          <button mat-raised-button color="accent" type="button" (click)="addTag()" class="delete-button">Add Price</button>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="!attractionForm.valid">Ändern</button>
+      </form>
+    </div>
+  </div>
+</div>
+<router-outlet/>
