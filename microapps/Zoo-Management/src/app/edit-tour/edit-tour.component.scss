@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+}
+
+
+.tile {
+  padding-top: 30px;
+  border: 1px solid #ccc;
+  word-break: break-word;
+  border-radius: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+}
+
+.delete-button {
+  margin: 20px;
+}

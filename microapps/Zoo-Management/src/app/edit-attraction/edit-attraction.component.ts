@@ -133,13 +133,13 @@ export class EditAttractionComponent  implements OnInit{
 
   onSubmit() {
     if (this.attractionForm.valid) {
-      this.service.putTour(this.attractionForm.value).subscribe({
+      this.service.putAttraction(this.attractionForm.value).subscribe({
         next: () => {
-          console.log('Tour changed!');
+          console.log('Attraction changed!');
 
         },
         error: (error) => {
-          console.error('Error sending Tour:', error);
+          console.error('Error sending Attraction:', error);
         }
       });
     }

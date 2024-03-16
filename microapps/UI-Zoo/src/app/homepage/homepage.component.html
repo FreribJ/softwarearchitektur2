@@ -13,7 +13,7 @@
     <div class="tile2">
 
       <span *ngIf="direktorModus==true">
-                 <a href="http://localhost:81" class="link" ><mat-icon>
+                 <a href="http://localhost:81/metadataEdit" class="link" ><mat-icon>
 edit</mat-icon></a>
        </span>
       <img [src]="this.data.logo" class="image">
@@ -21,7 +21,7 @@ edit</mat-icon></a>
     <div class="tile">
 
       <div><span *ngIf="direktorModus">
-        <a href="http://localhost:81" class="link"><mat-icon class="rechts">edit</mat-icon></a>
+        <a href="http://localhost:81/metadataEdit" class="link"><mat-icon class="rechts">edit</mat-icon></a>
        </span>
         <h1 class="headline" *ngIf="this.data.name"> Wilkommen beim {{ this.data.name }}! </h1>
         <div class="padding" *ngIf="this.data.address"> {{ this.data.address }}</div>
