@@ -1,6 +1,8 @@
 package com.hsw.birdparkmanagement.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hsw.birdparkmanagement.Exceptions.BadArgumentException;
+import com.hsw.birdparkmanagement.Exceptions.UnexpectedErrorException;
 import com.hsw.birdparkmanagement.model.database.Attraction;
 import com.hsw.birdparkmanagement.model.database.Metadata;
 import com.hsw.birdparkmanagement.model.database.SubAttraction;
@@ -13,11 +15,9 @@ import com.hsw.birdparkmanagement.repository.MetadataRepository;
 import com.hsw.birdparkmanagement.repository.TourRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Meta;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -40,21 +40,41 @@ public class PrivateService {
         //Initial Database setup
         if (this.metadataRepository.count() == 0) {
             List<Metadata> metadata = new ArrayList<>();
-            metadata.add(Metadata.builder().name("name").type("String").value("Bird Park HSW").build());
-            metadata.add(Metadata.builder().name("description").type("String").value("Welcome to the Bird Park").build());
-            metadata.add(Metadata.builder().name("logo").type("String").value("https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Hochschule_Weserbergland_logo.svg/2560px-Hochschule_Weserbergland_logo.svg.png").build());
-            metadata.add(Metadata.builder().name("address").type("String").value("Am Stockhof 2, 31785 Hameln").build());
-            metadata.add(Metadata.builder().name("prices").type("JSON").value("[{\"category\":\"Adult\",\"price\":20.0},{\"category\":\"Child\",\"price\":10.0}]").build());
-            metadata.add(Metadata.builder().name("openingHours").type("JSON").value("[{\"weekday\":\"Wochentag\",\"hours\":\"9:00 - 18:00\",\"info\":\"Außer an Feiertagen\"},{\"weekday\":\"Wochenende\",\"hours\":\"9:00 - 18:00\",\"info\":\"\"}]").build());
+            metadata.add(Metadata.builder().m_name("name").m_type("String").m_value("Bird Park HSW").build());
+            metadata.add(Metadata.builder().m_name("description").m_type("String").m_value("Welcome to the Bird Park").build());
+            metadata.add(Metadata.builder().m_name("logo").m_type("String").m_value("https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Hochschule_Weserbergland_logo.svg/2560px-Hochschule_Weserbergland_logo.svg.png").build());
+            metadata.add(Metadata.builder().m_name("address").m_type("String").m_value("Am Stockhof 2, 31785 Hameln").build());
+            metadata.add(Metadata.builder().m_name("prices").m_type("JSON").m_value("[{\"category\":\"Adult\",\"price\":20.0},{\"category\":\"Child\",\"price\":10.0}]").build());
+            metadata.add(Metadata.builder().m_name("openingHours").m_type("JSON").m_value("[{\"weekday\":\"Wochentag\",\"hours\":\"9:00 - 18:00\",\"info\":\"Außer an Feiertagen\"},{\"weekday\":\"Wochenende\",\"hours\":\"9:00 - 18:00\",\"info\":\"\"}]").build());
 
             this.metadataRepository.saveAll(metadata);
+
+            List<Attraction> attractions = new ArrayList<>();
+            attractions.add(Attraction.builder().name("attractionName1").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png").build());
+            attractions.add(Attraction.builder().name("attractionName2").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png").build());
+            attractions.add(Attraction.builder().name("attractionName3").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png").build());
+
+            attractionRepository.saveAll(attractions);
+
+            List<Tour> tours = new ArrayList<>();
+            tours.add(Tour.builder().name("tourName1").description("tourDescription").logo("https://www.tourLogo.png").price(12).subAttractions(List.of(
+                    SubAttraction.builder().attraction(attractions.get(0)).starttime("9:00").endtime("10:00").build(),
+                    SubAttraction.builder().attraction(attractions.get(1)).starttime("10:00").endtime("11:00").build(),
+                    SubAttraction.builder().attraction(attractions.get(2)).starttime("11:00").endtime("12:00").build()
+            )).build());
+
+            tours.add(Tour.builder().name("tourName2").description("tourDescription").logo("https://www.tourLogo.png").price(12).subAttractions(List.of(
+            )).build());
+
+            tourRepository.saveAll(tours);
         }
     }
 
     public void createAttraction(ROAttraction roattraction) {
+        if(roattraction.getName() == null || roattraction.getName().isEmpty())
+            throw new BadArgumentException("Attraction name cannot be empty");
         if (this.attractionRepository.existsById(roattraction.getName()))
-            throw new IllegalStateException("Attraction with name " + roattraction.getName() + " already exists");
-
+            throw new BadArgumentException("Attraction with name '" + roattraction.getName() + "' already exists");
         Attraction attraction = Attraction.builder()
                 .name(roattraction.getName())
                 .description(roattraction.getDescription())
@@ -65,8 +85,10 @@ public class PrivateService {
     }
 
     public void createTour(ROTour rotour) {
+        if(rotour.getName() == null || rotour.getName().isEmpty())
+            throw new BadArgumentException("Tour name cannot be empty");
         if (this.tourRepository.existsById(rotour.getName()))
-            throw new IllegalStateException("Tour with name " + rotour.getName() + " already exists");
+            throw new BadArgumentException("Tour with name '" + rotour.getName() + "' already exists");
 
         Tour tour = Tour.builder()
                 .name(rotour.getName())
@@ -77,7 +99,7 @@ public class PrivateService {
                                 .starttime(roSubAttraction.getBegin())
                                 .endtime(roSubAttraction.getEnd())
                                 .attraction(this.attractionRepository.findById(roSubAttraction.getAttraction()).orElseThrow(() ->
-                                        new IllegalStateException("Attraction with name " + roSubAttraction.getAttraction() + " does not exist")
+                                        new IllegalStateException("Attraction with name '" + roSubAttraction.getAttraction() + "' does not exist")
                                 )).build())
                         .collect(Collectors.toList()))
                 .build();
@@ -87,13 +109,13 @@ public class PrivateService {
     //TODO: Abhängigkeiten lassen sich nicht löschen!
     public void deleteAttraction(String name) {
         if (!this.attractionRepository.existsById(name))
-            throw new IllegalStateException("Attraction with name " + name + " does not exist");
+            throw new BadArgumentException("Attraction with name '" + name + "' does not exist");
         this.attractionRepository.deleteById(name);
     }
 
     public void deleteTour(String name) {
         if (!this.tourRepository.existsById(name))
-            throw new IllegalStateException("Tour with name " + name + " does not exist");
+            throw new BadArgumentException("Tour with name '" + name + "' does not exist");
         this.tourRepository.deleteById(name);
     }
 
@@ -101,49 +123,51 @@ public class PrivateService {
         try {
             return this.mapper.writeValueAsString(object);
         } catch (Exception e) {
-            throw new IllegalStateException("Could not convert object to JSON");
+            throw new UnexpectedErrorException("Could not convert object to JSON");
         }
     }
 
     public void updateMetadata(ROMetadata roMetadata) {
+        if (roMetadata == null)
+            throw new BadArgumentException("Metadata cannot be null");
         this.metadataRepository.findAll().forEach(data -> {
-            switch (data.getName()) {
+            switch (data.getM_name()) {
                 case "name":
-                    if (Objects.equals(data.getValue(), roMetadata.getName()) || roMetadata.getName() == null || roMetadata.getName().isEmpty())
+                    if (Objects.equals(data.getM_value(), roMetadata.getName()) || roMetadata.getName() == null || roMetadata.getName().isEmpty())
                         break;
-                    data.setValue(roMetadata.getName());
+                    data.setM_value(roMetadata.getName());
                     this.metadataRepository.save(data);
                     break;
                 case "description":
-                    if (Objects.equals(data.getValue(), roMetadata.getDescription()) || roMetadata.getDescription() == null)
+                    if (Objects.equals(data.getM_value(), roMetadata.getDescription()) || roMetadata.getDescription() == null)
                         break;
-                    data.setValue(roMetadata.getDescription());
+                    data.setM_value(roMetadata.getDescription());
                     this.metadataRepository.save(data);
                     break;
                 case "logo":
-                    if (Objects.equals(data.getValue(), roMetadata.getLogo()) || roMetadata.getLogo() == null)
+                    if (Objects.equals(data.getM_value(), roMetadata.getLogo()) || roMetadata.getLogo() == null)
                         break;
-                    data.setValue(roMetadata.getLogo());
+                    data.setM_value(roMetadata.getLogo());
                     this.metadataRepository.save(data);
                     break;
                 case "address":
-                    if (Objects.equals(data.getValue(), roMetadata.getAddress()) || roMetadata.getAddress() == null)
+                    if (Objects.equals(data.getM_value(), roMetadata.getAddress()) || roMetadata.getAddress() == null)
                         break;
-                    data.setValue(roMetadata.getAddress());
+                    data.setM_value(roMetadata.getAddress());
                     this.metadataRepository.save(data);
                     break;
                 case "prices":
                     String pricesString = this.convertJSONToString(roMetadata.getPrices());
-                    if (Objects.equals(data.getValue(), pricesString) || roMetadata.getPrices() == null)
+                    if (Objects.equals(data.getM_value(), pricesString) || roMetadata.getPrices() == null)
                         break;
-                    data.setValue(pricesString);
+                    data.setM_value(pricesString);
                     this.metadataRepository.save(data);
                     break;
                 case "openingHours":
                     String openingHoursString = this.convertJSONToString(roMetadata.getOpeningHours());
-                    if (Objects.equals(data.getValue(), openingHoursString) || roMetadata.getOpeningHours() == null)
+                    if (Objects.equals(data.getM_value(), openingHoursString) || roMetadata.getOpeningHours() == null)
                         break;
-                    data.setValue(openingHoursString);
+                    data.setM_value(openingHoursString);
                     this.metadataRepository.save(data);
                     break;
             }
@@ -153,8 +177,14 @@ public class PrivateService {
     //TODO: abhängige Attraktionen auch aktualisieren
     @Transactional
     public void updateAttraction(String name, ROAttraction roattraction) {
+        if (name.isEmpty())
+            throw new BadArgumentException("Name cannot be empty");
+        if (roattraction == null)
+            throw new BadArgumentException("Attraction cannot be null");
+        if (roattraction.getName() == null || roattraction.getName().isEmpty())
+            throw new BadArgumentException("Attraction name cannot be empty");
         if (!this.attractionRepository.existsById(name))
-            throw new IllegalStateException("Attraction with name " + name + " does not exist");
+            throw new BadArgumentException("Attraction with name '" + name + "' does not exist");
 
         Attraction attraction = Attraction.builder()
                 .name(roattraction.getName())
@@ -170,7 +200,7 @@ public class PrivateService {
     //    TODO: abhängige Touren auch aktualisieren
     public void updateTour(String name, ROTour rotour) {
         if (!this.tourRepository.existsById(name))
-            throw new IllegalStateException("Tour with name " + name + " does not exist");
+            throw new BadArgumentException("Tour with name '" + name + "' does not exist");
 
         Tour tour = Tour.builder()
                 .name(rotour.getName())
@@ -181,7 +211,7 @@ public class PrivateService {
                                 .starttime(roSubAttraction.getBegin())
                                 .endtime(roSubAttraction.getEnd())
                                 .attraction(this.attractionRepository.findById(roSubAttraction.getAttraction()).orElseThrow(() ->
-                                        new IllegalStateException("Attraction with name " + roSubAttraction.getAttraction() + " does not exist")
+                                        new BadArgumentException("Attraction with name " + roSubAttraction.getAttraction() + " does not exist")
                                 )).build())
                         .collect(Collectors.toList()))
                 .build();

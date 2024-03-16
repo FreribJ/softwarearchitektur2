@@ -18,7 +18,7 @@ import java.util.List;
 
 @CrossOrigin(origins = {"http://localhost:8080/", "http://192.168.0.196/"}, maxAge = 3600)
 @RestController
-@Tag(description = "Public API", name = "Public")
+@Tag(name = "Public API", description = "Public Get Endpoints for the bird park management system")
 public class PublicGet {
 
     PublicService publicService;
