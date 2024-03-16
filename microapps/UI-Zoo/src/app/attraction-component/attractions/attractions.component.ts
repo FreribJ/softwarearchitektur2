@@ -107,4 +107,7 @@ export class AttractionsComponent implements OnInit {
       this.selectedChips = [];
     }
 
+  add() {
+
+  }
 }

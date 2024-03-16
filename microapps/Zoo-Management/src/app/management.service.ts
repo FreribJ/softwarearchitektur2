@@ -16,18 +16,20 @@ export class ManagementService {
     return this.http.get<Metadata>(this.host + this.port + "/metadata")
   }
 
+  putMetadata(metadata: Metadata) {
+    return this.http.put<any>(this.host + this.port, metadata);
+  }
+
   getTour(name: String) {
     return this.http.get<Tour>(this.host + this.port + "/tour/" + name);
   }
 
   putTour(tour: Tour) {
-    return this.http.get<String>(this.host + this.port + "/tours/" + name);
+    return this.http.put<String>(this.host + this.port, tour);
   }
-  putAttraction(tour: Tour) {
-    return this.http.get<String>(this.host + this.port + "/tours/" + name);
+  putAttraction(attraction: Attraction) {
+    return this.http.put<String>(this.host + this.port, attraction);
   }
-
-
   getAttraction(name: String) {
     return this.http
       .get<Attraction>(this.host + this.port + "/attraction/" + name);

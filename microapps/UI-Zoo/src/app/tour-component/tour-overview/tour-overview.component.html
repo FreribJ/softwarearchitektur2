@@ -12,8 +12,8 @@
       <div class="headline">{{ this.tour.name }}
         <span *ngIf="direktorModus">
          <mat-icon class="rechts">
-           <a [routerLink]="['']" class="link">edit
-         </a>
+          <a href="http://localhost:81?parameter={{this.tour.name}}" class="link">
+          edit</a>
          </mat-icon>
        </span>
       </div>

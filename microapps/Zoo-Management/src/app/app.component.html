@@ -1,9 +1,13 @@
-<div *ngIf="!this?.metadataForm">
+<div *ngIf="this.loading">
   Loading...
+  <mat-spinner color="access"></mat-spinner>
 </div>
 
 <div class="container">
+  <div>
   <div *ngIf="this.metadataForm" class="tile">
+    <h2>Die Metadaten ändern</h2><br>
+
     <form [formGroup]="this.metadataForm" class="example-form" (ngSubmit)="onSubmit()">
       <div>
         <mat-form-field class="example-full-width">
@@ -20,56 +24,55 @@
       <div>
         <mat-form-field class="example-full-width">
           <mat-label>Logo</mat-label>
-          <input matInput type="text" formControlName="logo" placeholder="Logo">
+          <textarea matInput type="text" formControlName="logo" placeholder="Logo" cdkTextareaAutosize>   </textarea>
         </mat-form-field>
       </div>
+      <img src="this.metadataForm.get('logo')?.value">
+
       <div>
         <mat-form-field class="example-full-width">
           <mat-label>Address</mat-label>
-          <input matInput type="text" formControlName="address" placeholder="Addresse">
+          <textarea matInput type="text" formControlName="address" placeholder="Addresse" cdkTextareaAutosize>  </textarea>
         </mat-form-field>
       </div>
 
-      <div>
-        <div *ngFor="let hours of this.metadata?.openingHours; let i=index">
+
+        <div *ngFor="let openingHour of getOpeningHoursControls(); let i = index">
 
           <mat-form-field class="example-full-width">
             <mat-label>Tag</mat-label>
-            <input matInput type="text" formControlName="openingWeekday" placeholder="Zeitraum">
+            <input matInput type="text"  placeholder="Zeitraum" [value]="openingHour.get('openingWeekday')?.value">
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Zeitraum</mat-label>
-            <input matInput type="text" formControlName="openingHours" placeholder="Zeitraum">
+            <input matInput type="text"  placeholder="Zeitraum" [value]="openingHour.get('openingHours')?.value">
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Info</mat-label>
-            <input matInput type="text" formControlName="openingInfo" placeholder="Information">
+            <input matInput type="text"  placeholder="Information" [value]="openingHour.get('openingInfo')?.value">
           </mat-form-field>
           <button mat-raised-button color="warn" (click)="deleteOpeningHours(i)" class="delete-button">Delete</button>
         </div>
         <button mat-raised-button color="accent" type="button" (click)="addOpeningHours()" class="delete-button">Add Opening Hours</button>
-      </div>
-      <div formArrayName="prices">
-        <div *ngFor="let price of this.metadata?.prices; let i=index">
-          <div [formGroupName]="i">
+
+        <div *ngFor="let price of getPricesControls(); let i = index">
             <mat-form-field class="example-full-width">
               <mat-label>Kategorie</mat-label>
-              <input matInput type="text" formControlName="category" placeholder="Kategorie">
+              <input matInput type="text"  placeholder="Kategorie" [value]="price.get('prices')?.value">
             </mat-form-field>
             <mat-form-field class="example-full-width">
               <mat-label>Preis</mat-label>
-              <input matInput type="number" formControlName="prices" placeholder="Preis">
+              <input matInput type="number" placeholder="Preis" [value]="price.get('prices')?.value">
             </mat-form-field>
             <button mat-raised-button color="warn" type="button" (click)="deletePrice(i)" class="delete-button">Delete</button>
           </div>
-        </div>
         <button mat-raised-button color="accent" type="button" (click)="addPrice()" class="delete-button">Add Price</button>
-      </div>
 
 
-      <button mat-raised-button color="primary" type="submit">Submit</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!metadataForm.valid">Ändern</button>
     </form>
   </div>
+</div>
 </div>
 <router-outlet/>
 

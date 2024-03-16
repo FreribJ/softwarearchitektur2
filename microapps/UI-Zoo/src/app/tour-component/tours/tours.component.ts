@@ -9,24 +9,26 @@ import {Subscription} from "rxjs";
 import {MatIcon} from "@angular/material/icon";
 import {TourOverviewComponent} from "../tour-overview/tour-overview.component";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatButton} from "@angular/material/button";
 
 @Component({
 
   selector: 'app-tours',
   standalone: true,
-  imports: [
-    MatGridTile,
-    MatGridList,
-    NgFor,
-    MatChip,
-    MatChipOption,
-    RouterLink,
-    MatChipListbox,
-    NgIf,
-    MatIcon,
-    TourOverviewComponent,
-    MatProgressSpinner
-  ],
+    imports: [
+        MatGridTile,
+        MatGridList,
+        NgFor,
+        MatChip,
+        MatChipOption,
+        RouterLink,
+        MatChipListbox,
+        NgIf,
+        MatIcon,
+        TourOverviewComponent,
+        MatProgressSpinner,
+        MatButton
+    ],
   templateUrl: './tours.component.html',
   styleUrl: './tours.component.scss'
 })
@@ -53,5 +55,9 @@ export class ToursComponent implements OnInit {
     this.modusSubscription! = this.service.modus$.subscribe(enabled => {
       this.direktorModus = enabled;
     });
+  }
+
+  add() {
+
   }
 }
