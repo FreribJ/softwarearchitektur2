@@ -5,6 +5,7 @@ import com.hsw.birdparkgeneral.model.ui.ROMetadata;
 import com.hsw.birdparkgeneral.model.ui.ROTour;
 import com.hsw.birdparkgeneral.service.PublicService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,9 +18,14 @@ public class ManagmentSPI {
 
     //Hier könnte jetzt quasi ein Token mitgegeben werden, um sich beim Backend zu authentifizieren
 
-    final String host = "http://management-microservice:8081/";
-    RestTemplate restTemplate = new RestTemplate();
+    String host;
 
+    @Autowired
+    public ManagmentSPI(Environment env) {
+        this.host = "http://" + env.getProperty("serviceHost") + ":8081/";
+    }
+
+    RestTemplate restTemplate = new RestTemplate();
 
     //Metadata
     public ROMetadata getMetadata() {
