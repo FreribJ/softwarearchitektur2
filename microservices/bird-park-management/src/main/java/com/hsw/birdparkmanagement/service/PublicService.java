@@ -1,7 +1,8 @@
 package com.hsw.birdparkmanagement.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hsw.birdparkmanagement.Exceptions.BadArgumentException;
+import com.hsw.birdparkmanagement.Exceptions.NotFoundException;
 import com.hsw.birdparkmanagement.model.database.Attraction;
 import com.hsw.birdparkmanagement.model.database.SubAttraction;
 import com.hsw.birdparkmanagement.model.database.Tour;
@@ -15,9 +16,7 @@ import com.hsw.birdparkmanagement.repository.TourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,24 +47,24 @@ public class PublicService {
         ROMetadata metadata = new ROMetadata();
 
         this.metadataRepository.findAll().forEach(data -> {
-            switch (data.getName()) {
+            switch (data.getM_name()) {
                 case "name":
-                    metadata.setName(data.getValue());
+                    metadata.setName(data.getM_value());
                     break;
                 case "description":
-                    metadata.setDescription(data.getValue());
+                    metadata.setDescription(data.getM_value());
                     break;
                 case "logo":
-                    metadata.setLogo(data.getValue());
+                    metadata.setLogo(data.getM_value());
                     break;
                 case "address":
-                    metadata.setAddress(data.getValue());
+                    metadata.setAddress(data.getM_value());
                     break;
                 case "openingHours":
-                    metadata.setOpeningHours(this.convertToJsonNode(data.getValue(), ROMetadata.OpeningHour[].class));
+                    metadata.setOpeningHours(this.convertToJsonNode(data.getM_value(), ROMetadata.OpeningHour[].class));
                     break;
                 case "prices":
-                    metadata.setPrices(this.convertToJsonNode(data.getValue(), ROMetadata.Price[].class));
+                    metadata.setPrices(this.convertToJsonNode(data.getM_value(), ROMetadata.Price[].class));
                     break;
             }
         });
@@ -94,7 +93,10 @@ public class PublicService {
     }
 
     public ROAttraction getAttraction(String name) {
-        return this.convertAttraction(this.attractionRepository.findById(name).orElse(null));
+        if (name == null || name.isEmpty()) {
+            throw new BadArgumentException("Name cannot be empty");
+        }
+        return this.convertAttraction(this.attractionRepository.findById(name).orElseThrow(() -> new NotFoundException("Attraction")));
     }
 
     public List<String> getAttractionNames() {
@@ -131,7 +133,10 @@ public class PublicService {
     }
 
     public ROTour getTour(String name) {
-        return this.convertTour(this.tourRepository.findById(name).orElse(null));
+        if (name == null || name.isEmpty()) {
+            throw new BadArgumentException("Name cannot be empty");
+        }
+        return this.convertTour(this.tourRepository.findById(name).orElseThrow(() -> new NotFoundException("Tour")));
     }
 
     public List<String> getTourNames() {

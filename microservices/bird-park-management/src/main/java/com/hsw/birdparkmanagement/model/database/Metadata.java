@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Entity
 @Builder
@@ -16,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Metadata {
     @Id
-    String name;
-    String type;
-    String value;
+    String m_name;
+    String m_type;
+    String m_value;
 }
