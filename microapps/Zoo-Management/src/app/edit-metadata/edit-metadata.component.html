@@ -1,12 +1,14 @@
-<div *ngIf="this.loading">
+<div *ngIf="this.loading" class="container">
   Loading...
   <mat-spinner color="access"></mat-spinner>
 </div>
-
-<div class="container">
+<div *ngIf="this.error && !this.loading" class="container">
+  <h1>Metadaten konnte nicht geladen werden</h1>
+</div>
+<div class="container" *ngIf="!this.error && !this.loading">
   <div>
     <div *ngIf="this.metadataForm" class="tile">
-      <h2>Die Metadaten ändern</h2><br>
+     <div> <h2>Die Metadaten ändern</h2></div>
 
       <form [formGroup]="this.metadataForm" class="example-form" (ngSubmit)="onSubmit()">
         <div>
@@ -67,9 +69,11 @@
           <button mat-raised-button color="warn" type="button" (click)="deletePrice(i)" class="delete-button">Delete</button>
         </div>
         <button mat-raised-button color="accent" type="button" (click)="addPrice()" class="delete-button">Add Price</button>
+        <p>
 
-
+        <button mat-raised-button color="accent" type="reset" class="delete-button">Reset</button>
         <button mat-raised-button color="primary" type="submit" [disabled]="!metadataForm.valid">Ändern</button>
+        </p>
       </form>
     </div>
   </div>

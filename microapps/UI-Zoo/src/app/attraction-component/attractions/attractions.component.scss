@@ -3,8 +3,13 @@
   font-weight: bold;
 }
 .link {
-  color: #000000;
+  color: #ffffff;
   text-decoration: none;
+  margin-right: 50px;
+  justify-self: end;
+  width: 100px;
+  align-items: center;
+  justify-content: center;
 }
 
 .container {
@@ -16,10 +21,6 @@
 }
 .menu {
   grid-auto-columns: auto;
-}
-.rechts {
-  margin-right: 50px;
-  justify-content: end;
 }
 
 .grid{

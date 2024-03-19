@@ -9,6 +9,7 @@ import {MatInput} from "@angular/material/input";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {NgForOf, NgIf} from "@angular/common";
 import {RouterOutlet} from "@angular/router";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-edit-attraction',
@@ -33,8 +34,10 @@ export class EditAttractionComponent  implements OnInit{
   attraction: Attraction | undefined;
   attractionForm: FormGroup = new FormGroup({});
   protected loading= true;
+  error= false;
+  protected attractionName: null | string | undefined ;
 
-  constructor(private fb: FormBuilder, private service: ManagementService) {
+  constructor(private fb: FormBuilder, private service: ManagementService, private dialog: MatDialog) {
     this.attractionForm= this.fb.group({
       name: ['', Validators.required],
       logo: ['', Validators.required],
@@ -45,9 +48,10 @@ export class EditAttractionComponent  implements OnInit{
     });
   }
   ngOnInit(): void {
-    const attractionName = this.getParameterByName('parameter');
-    if (attractionName != null) {
-      this.service.getAttraction(attractionName).subscribe(attraction => {
+    this.attractionName = this.getParameterByName('parameter');
+    console.log(this.attractionName)
+    if (this.attractionName != null) {
+      this.service.getAttraction(this.attractionName).subscribe(attraction => {
         this.attraction = attraction;
         this.attractionForm.controls['name'].setValue(attraction.name);
         this.attractionForm.controls['logo'].setValue(attraction.logo);
@@ -55,7 +59,13 @@ export class EditAttractionComponent  implements OnInit{
         this.setTours(attraction);
         this.setTags(attraction);
         this.loading = false;
+      }, error => {
+        this.error = true;
+        console.log("Error: " + error);
       });
+    }
+    else {
+      this.loading = false;
     }
   }
 
@@ -133,15 +143,40 @@ export class EditAttractionComponent  implements OnInit{
 
   onSubmit() {
     if (this.attractionForm.valid) {
-      this.service.putAttraction(this.attractionForm.value).subscribe({
-        next: () => {
-          console.log('Attraction changed!');
+      if (this.attractionName != null) {
+        this.service.putAttraction(this.attractionForm.value, this.attractionName).subscribe({
+          next: () => {
+            console.log('Attraction changed!');
 
-        },
-        error: (error) => {
-          console.error('Error sending Attraction:', error);
-        }
-      });
+          },
+          error: (error) => {
+            console.error('Error sending Attraction:', error);
+          }
+        });
+      } else if(this.attractionName == null) {
+        this.service.postAttraction(this.attractionForm.value).subscribe({
+          next: () => {
+            console.log('Attraction added!');
+
+          },
+          error: (error) => {
+            console.error('Error posting Attraction:', error);
+          }
+        });
+      }
     }
+  }
+
+  deleteAttraction() {
+    if(this.attractionName != null) {
+this.service.deleteAttraction(this.attractionName).subscribe({
+  next: () => {
+    console.log('Attraction deleted!');
+  },
+  error: (error) => {
+    console.error('Error deleting Attraction:', error);
+  }
+});
+  }
   }
 }

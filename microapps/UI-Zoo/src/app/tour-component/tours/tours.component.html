@@ -1,22 +1,28 @@
 <div *ngIf="error" class="container">
   <mat-icon>error</mat-icon>
-  <div >Fehler beim Laden der Attraktionen</div>
+  <div >Fehler beim Laden der Touren</div>
 </div>
+
 <h1 *ngIf="!this.tours &&!error" class="container">loading
   <mat-spinner color="access"></mat-spinner>
 </h1>
-<div class="container" *ngIf="this.tours?.length!= 0; else elseBlock">
+
+<div class="headline" *ngIf="!this.error && this.tours?.length === 0">
+  <div class="headline"> Keine Touren gefunden</div>
+</div>
+
+<div class="container" *ngIf="this.tours?.length!= 0">
   <div *ngFor="let tour of this.tours;" >
 <app-tour-overview [tour]=tour>
   <a [routerLink]="['/tour-overview',this.tour?.name]" class="link"> </a>
 </app-tour-overview>
   </div>
-  <a href="http://localhost:81/tourEdit" target="_blank" class="rechts">
-  <button *ngIf="direktorModus" mat-raised-button color="primary">add<mat-icon>add</mat-icon> </button>
+</div>
+
+<div class="grid">
+  <a href="http://localhost:81/tourEdit" target="_blank" class="link">
+    <button *ngIf="direktorModus" mat-raised-button color="primary">
+      add <mat-icon>add</mat-icon>
+    </button>
   </a>
 </div>
-<ng-template #elseBlock>
-  <div class="container" *ngIf="!this.error">
-    <div class="headline">Keine Touren vorhanden</div>
-  </div>
-</ng-template>

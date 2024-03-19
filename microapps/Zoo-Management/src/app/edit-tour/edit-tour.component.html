@@ -1,12 +1,14 @@
-<div *ngIf="this.loading">
+<div *ngIf="this.loading" class="container">
   Loading...
   <mat-spinner color="access"></mat-spinner>
 </div>
-
-<div class="container">
+<div *ngIf="this.error" class="container">
+  <h1>Tour konnte nicht geladen werden</h1>
+</div>
+<div class="container" *ngIf="!this.error">
   <div>
     <div *ngIf="this.tourForm" class="tile">
-      <h2>Die Attraktion ändern</h2><br>
+     <div> <h2>Die Tour bearbeiten</h2></div>
 
       <form [formGroup]="this.tourForm" class="example-form" (ngSubmit)="onSubmit()">
         <div>
@@ -36,26 +38,26 @@
         </div>
 
         <div *ngFor="let attraction of getAttractionsControls(); let i = index">
-
+          <mat-label>Tag:</mat-label>
           <mat-form-field class="example-full-width">
-            <mat-label>Tag</mat-label>
             <input matInput type="text"  placeholder="Name" [value]="attraction.get('attraction')?.value">
           </mat-form-field>
-          <mat-label>Tag</mat-label>
+          <mat-label>Beginn:</mat-label>
           <mat-form-field class="example-full-width">
           <input matInput type="text"  placeholder="Beginn" [value]="attraction.get('begin')?.value">
           </mat-form-field>
-          <mat-label>Tag</mat-label>
+          <mat-label>Ende:</mat-label>
           <mat-form-field class="example-full-width">
           <input matInput type="text"  placeholder="Ende" [value]="attraction.get('end')?.value">
           </mat-form-field>
           <button mat-raised-button color="warn" (click)="deleteAttraction(i)" class="delete-button">Delete</button>
         </div>
         <button mat-raised-button color="accent" type="button" (click)="addAttraction()" class="delete-button">Add Attraction</button>
-
-
-
+        <p>
+        <button mat-raised-button color="warn" type="button" class="delete-button" (click)="deleteTour()" *ngIf="this.tourName!=null">Delete</button>
+        <button mat-raised-button color="accent" type="reset" class="delete-button">Reset</button>
         <button mat-raised-button color="primary" type="submit" [disabled]="!tourForm.valid">Ändern</button>
+        </p>
       </form>
     </div>
   </div>

@@ -1,6 +1,15 @@
-<h1 *ngIf="this.showList.length == 0 &&!error&& this.showList==this.attractions" class="container">loading
+<div *ngIf="error" class="container">
+  <mat-icon>error</mat-icon>
+  <div >Fehler beim Laden der Attraktionen</div>
+</div>
+
+<h1 *ngIf="!this.attractions &&!error" class="container">loading
   <mat-spinner color="access"></mat-spinner>
 </h1>
+
+<div class="headline" *ngIf="!this.error && this.attractions?.length===0">
+  <div class="headline"> Keine Attraktionen gefunden</div>
+</div>
 
 <div class="grid">
   <div *ngIf="this.tagListe?.length!=0" class="liste">
@@ -20,14 +29,10 @@
   </div>
 
 
-  <div *ngIf="error" class="container">
-    <mat-icon>error</mat-icon>
-    <div>Fehler beim Laden der Attraktionen</div>
-  </div>
 
 
 
-  <div class="container" *ngIf="this.showList.length!= 0 && !this.error; else elseBlock">
+  <div class="container" *ngIf="this.showList.length!= 0 && !this.error">
 
     <div *ngFor="let attraction of this.showList;">
       <app-attraction-overview [attraction]="attraction">
@@ -35,13 +40,11 @@
       </app-attraction-overview>
     </div>
   </div>
-  <a href="http://localhost:81/AttractionEdit" target="_blank" class="rechts">
-  <button *ngIf="direktorModus" mat-raised-button color="primary">add<mat-icon>add</mat-icon> </button>
+  <a href="http://localhost:81/AttractionEdit" target="_blank" class="link">
+  <button *ngIf="direktorModus" mat-raised-button color="primary">
+     add <mat-icon>add</mat-icon>
+  </button>
   </a>
+
 </div>
 
-<ng-template #elseBlock>
-  <div class="headline" *ngIf="!this.error">
-    <div class="headline"> Keine Attraktionen gefunden</div>
-  </div>
-</ng-template>

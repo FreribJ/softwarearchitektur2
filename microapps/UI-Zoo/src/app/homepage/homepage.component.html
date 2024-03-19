@@ -1,13 +1,14 @@
 <div *ngIf="error" class="container">
   <mat-icon >error</mat-icon>
-  <div class="error">Fehler beim Laden der Metadaten</div>
+  <div>Fehler beim Laden der Metadaten</div>
 </div>
+
 <h1 *ngIf="!this.data &&!error" class="container">loading
   <mat-spinner color="access"></mat-spinner>
 </h1>
 
 
-<div *ngIf="this.data&& !this.error ; else elseBlock">
+<div *ngIf="this.data && !this.error ">
   <div class="container">
 
     <div class="tile2">
@@ -39,8 +40,3 @@ edit</mat-icon></a>
 
   </div>
 </div>
-<ng-template #elseBlock >
-  <div class="container" *ngIf="this.error">
-    <div class="headline">Startseite nicht aufrufbar</div>
-  </div>
-</ng-template>

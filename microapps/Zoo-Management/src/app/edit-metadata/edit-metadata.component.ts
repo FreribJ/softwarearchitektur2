@@ -22,6 +22,8 @@ export class EditMetadataComponent implements OnInit {
   metadata: Metadata | undefined;
   metadataForm: FormGroup = new FormGroup({});
   protected loading= true;
+  error= false;
+
 
   constructor(private fb: FormBuilder, private service: ManagementService) {
     this.metadataForm = this.fb.group({
@@ -43,7 +45,10 @@ export class EditMetadataComponent implements OnInit {
       this.setOpeningHours(metadata);
       this.setPrices(metadata);
       this.loading = false;
-    });
+    }, error => {
+      this.error = true;
+      console.log("Error: " + error);
+    });;
   }
   get openingHoursForms() {
     return this.metadataForm?.get('openingHours') as FormArray;

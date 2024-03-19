@@ -24,11 +24,18 @@ export class ManagementService {
     return this.http.get<Tour>(this.host + this.port + "/tour/" + name);
   }
 
-  putTour(tour: Tour) {
-    return this.http.put<String>(this.host + this.port, tour);
+  putTour(tour: Tour, name: String) {
+    return this.http.put<any>(this.host + this.port+"/tour/" + name, tour);
   }
-  putAttraction(attraction: Attraction) {
-    return this.http.put<String>(this.host + this.port, attraction);
+  putAttraction(attraction: Attraction, name: String) {
+    return this.http.put<any>(this.host + this.port+ "/attraction/" + name, attraction);
+  }
+  postAttraction(attraction: Attraction) {
+    return this.http.post<any>(this.host + this.port + "/attraction", attraction);
+  }
+
+  postTour(tour: Tour) {
+    return this.http.post<any>(this.host + this.port + "/tour", tour);
   }
   getAttraction(name: String) {
     return this.http
@@ -36,4 +43,10 @@ export class ManagementService {
   }
 
 
+  deleteAttraction(name: string) {
+    return this.http.delete(this.host + this.port + "/attraction/" + name);
+  }
+  deleteTour(name: string) {
+    return this.http.delete(this.host + this.port + "/tour/" + name);
+  }
 }

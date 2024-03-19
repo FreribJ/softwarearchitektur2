@@ -31,7 +31,7 @@ import {MatButton} from "@angular/material/button";
 export class AttractionsComponent implements OnInit {
   private modusSubscription!: Subscription;
   direktorModus = false;
-  attractions: Attraction[] = [];
+  attractions?: Attraction[];
   error = false;
   tagListe: String[] = [];
   selectedChips: String[] = [];
@@ -69,9 +69,6 @@ export class AttractionsComponent implements OnInit {
     }
   }
 
-  detailTour(name: String) {
-    this.router.navigate(['tour-overview', name]);
-  }
 
   toggleSelection(chip: String): void {
     if (this.isSelected(chip)) {
@@ -88,6 +85,7 @@ export class AttractionsComponent implements OnInit {
   }
 
   filtern() {
+    if(this.attractions){
     if (this.selectedChips.length == 0) {
       this.showList = this.attractions;
       return;
@@ -99,10 +97,12 @@ export class AttractionsComponent implements OnInit {
       }
       return true;
     });
-  }
+      }
+    }
   }
     loeschen()
     {
+      if(this.attractions)
       this.showList = this.attractions;
       this.selectedChips = [];
     }

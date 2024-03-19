@@ -29,12 +29,15 @@ import {RouterOutlet} from "@angular/router";
   templateUrl: './edit-tour.component.html',
   styleUrl: './edit-tour.component.scss'
 })
-export class EditTourComponent implements OnInit{
-tour: Tour | undefined;
- tourForm: FormGroup = new FormGroup({});
-  protected loading= true;
+export class EditTourComponent implements OnInit {
+  tour: Tour | undefined;
+  tourForm: FormGroup = new FormGroup({});
+  protected loading = true;
+  error = false;
+  protected tourName: null | string | undefined;
+
   constructor(private fb: FormBuilder, private service: ManagementService) {
-    this.tourForm= this.fb.group({
+    this.tourForm = this.fb.group({
       name: ['', Validators.required],
       logo: ['', Validators.required],
       description: ['', Validators.required],
@@ -44,29 +47,37 @@ tour: Tour | undefined;
   }
 
   ngOnInit(): void {
-    const tourName = this.getParameterByName('parameter');
-    if (tourName != null) {
-    this.service.getTour(tourName).subscribe(tour => {
-      this.tour = tour;
-      this.tourForm.controls['name'].setValue(tour.name);
-      this.tourForm.controls['logo'].setValue(tour.logo);
-      this.tourForm.controls['price'].setValue(tour.price);
-      this.tourForm.controls['description'].setValue(tour.description);
-      this.setAttractions(tour);
+    console.log(window.location.href);
+    this.tourName = this.getParameterByName('parameter');
+    console.log(this.tourName)
+    if (this.tourName != null) {
+      this.service.getTour(this.tourName).subscribe(tour => {
+        this.tour = tour;
+        this.tourForm.controls['name'].setValue(tour.name);
+        this.tourForm.controls['logo'].setValue(tour.logo);
+        this.tourForm.controls['price'].setValue(tour.price);
+        this.tourForm.controls['description'].setValue(tour.description);
+        this.setAttractions(tour);
+        this.loading = false;
+      }, error => {
+        this.error = true;
+        console.log("Error: " + error);
+      });
+      ;
+    } else {
       this.loading = false;
-    });
-  }
+    }
   }
 
- getParameterByName(name: string) {
-  const url = window.location.href;
-  name = name.replace(/[\[\]]/g, '\\$&');
-  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-    results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
+  getParameterByName(name: string) {
+    const url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
 
   private setAttractions(tour: Tour) {
     const attractionArray = this.tourForm.get('attractions') as FormArray;
@@ -98,18 +109,46 @@ tour: Tour | undefined;
   deleteAttraction(index: number) {
     this.attractionForms.removeAt(index);
   }
+
   getAttractionsControls() {
     return (this.tourForm.get('attractions') as FormArray).controls;
   }
+
   onSubmit() {
     if (this.tourForm.valid) {
-      this.service.putTour(this.tourForm.value).subscribe({
-        next: () => {
-          console.log('Tour changed!');
+      if (this.tourName != null) {
 
+        this.service.putTour(this.tourForm.value, this.tourName).subscribe({
+          next: () => {
+            console.log('Tour changed!');
+
+          },
+          error: (error) => {
+            console.error('Error sending Tour:', error);
+          }
+        });
+      } else if (this.tourName == null) {
+        this.service.postTour(this.tourForm.value).subscribe({
+          next: () => {
+            console.log('Tour added!');
+
+          },
+          error: (error) => {
+            console.error('Error posting Tour:', error);
+          }
+        });
+      }
+    }
+  }
+
+  deleteTour() {
+    if(this.tourName != null) {
+      this.service.deleteTour(this.tourName).subscribe({
+        next: () => {
+          console.log('Attraction deleted!');
         },
         error: (error) => {
-          console.error('Error sending Tour:', error);
+          console.error('Error deleting Attraction:', error);
         }
       });
     }

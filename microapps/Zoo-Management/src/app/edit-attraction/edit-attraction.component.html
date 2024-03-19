@@ -1,12 +1,15 @@
-<div *ngIf="this.loading">
+<div *ngIf="this.loading" class="container">
   Loading...
   <mat-spinner color="access"></mat-spinner>
+</div>
+<div *ngIf="this.error" class="container">
+  <h1>Attraktion konnte nicht geladen werden</h1>
 </div>
 
 <div class="container">
   <div>
     <div *ngIf="this.attractionForm" class="tile">
-      <h2>Die Attraktion ändern</h2><br>
+      <div><h2>Die Attraktion bearbeiten</h2></div>
 
       <form [formGroup]="this.attractionForm" class="example-form" (ngSubmit)="onSubmit()">
         <div>
@@ -33,7 +36,6 @@
         <div *ngFor="let tour of getToursControls(); let i = index">
 
           <mat-form-field class="example-full-width">
-            <mat-label>Tag</mat-label>
             <input matInput type="text"  placeholder="Name" [value]="tour.get('tourName')?.value">
           </mat-form-field>
           <button mat-raised-button color="warn" (click)="deleteTour(i)" class="delete-button">Delete</button>
@@ -42,15 +44,17 @@
 
           <div *ngFor="let tag of getTagsControls(); let i = index">
             <mat-form-field class="example-full-width">
-              <mat-label>Kategorie</mat-label>
-              <input matInput type="text"  placeholder="Kategorie" [value]="tag.get('tagName')?.value">
+              <input matInput type="text"  placeholder="Tag" [value]="tag.get('tagName')?.value">
             </mat-form-field>
 
             <button mat-raised-button color="warn" type="button" (click)="deleteTag(i)" class="delete-button">Delete</button>
           </div>
-          <button mat-raised-button color="accent" type="button" (click)="addTag()" class="delete-button">Add Price</button>
-
-        <button mat-raised-button color="primary" type="submit" [disabled]="!attractionForm.valid">Ändern</button>
+          <button mat-raised-button color="accent" type="button" (click)="addTag()" class="delete-button">Add Tag</button>
+<p>
+        <button mat-raised-button color="primary" type="submit" class="delete-button"[disabled]="!attractionForm.valid">Ändern</button>
+        <button mat-raised-button color="warn" type="button" class="delete-button"(click)="deleteAttraction()" *ngIf="this.attractionName!=null">Delete</button>
+        <button mat-raised-button color="accent" type="reset">Reset</button>
+        </p>
       </form>
     </div>
   </div>

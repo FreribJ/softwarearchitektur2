@@ -8,6 +8,8 @@ import {MatButton} from "@angular/material/button";
 import {Metadata} from "./entites";
 import {CdkTextareaAutosize} from "@angular/cdk/text-field";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-root',
@@ -18,4 +20,19 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 })
 export class AppComponent {
 
+  constructor(private router: Router) {
+  }
+  editTour() {
+     this.router.navigate(['/tourEdit']);
+  }
+
+  editAttraction() {
+    this.router.navigate(['/attractionEdit']);
+
+  }
+
+  editMetadata() {
+    this.router.navigate(['/metadataEdit']);
+
+  }
 }

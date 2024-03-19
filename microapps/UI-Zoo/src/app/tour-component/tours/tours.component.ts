@@ -36,7 +36,7 @@ export class ToursComponent implements OnInit {
   private modusSubscription!: Subscription;
   direktorModus = false;
 
-  protected tours?: Tour[] ;
+   tours?: Tour[] ;
   error= false;
 
 
