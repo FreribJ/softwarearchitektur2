@@ -29,9 +29,9 @@
             <textarea matInput type="text" formControlName="logo" placeholder="Logo" cdkTextareaAutosize>   </textarea>
           </mat-form-field>
         </div>
-        <img src="this.metadataForm.get('logo')?.value">
+          <img [src]="this.logo" alt="Logo" width="160" height="100"> <button  mat-raised-button color="accent" (click)="refreshLogo()"><mat-icon>refresh</mat-icon></button>
 
-        <div>
+    <div>
           <mat-form-field class="example-full-width">
             <mat-label>Address</mat-label>
             <textarea matInput type="text" formControlName="address" placeholder="Addresse" cdkTextareaAutosize>  </textarea>

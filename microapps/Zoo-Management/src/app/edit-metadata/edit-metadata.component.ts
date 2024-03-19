@@ -9,11 +9,12 @@ import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Val
 import {Metadata} from "../entites";
 import {ManagementService} from "../management.service";
 import {RouterOutlet} from "@angular/router";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'app-edit-metadata',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterOutlet, ReactiveFormsModule, NgIf, NgForOf, MatInput, MatLabel, MatFormField, MatButton, CdkTextareaAutosize, MatProgressSpinner],
+  imports: [MatIcon,FormsModule, CommonModule, RouterOutlet, ReactiveFormsModule, NgIf, NgForOf, MatInput, MatLabel, MatFormField, MatButton, CdkTextareaAutosize, MatProgressSpinner],
   templateUrl: './edit-metadata.component.html',
   styleUrl: './edit-metadata.component.scss'
 })
@@ -23,14 +24,15 @@ export class EditMetadataComponent implements OnInit {
   metadataForm: FormGroup = new FormGroup({});
   protected loading= true;
   error= false;
+  logo= '';
 
 
   constructor(private fb: FormBuilder, private service: ManagementService) {
     this.metadataForm = this.fb.group({
-      name: ['', Validators.required],
-      logo: ['', Validators.required],
-      address: ['', Validators.required],
-      description: ['', Validators.required],
+      name: [''],
+      logo: [''],
+      address: [''],
+      description: [''],
       openingHours: this.fb.array([]),
       prices: this.fb.array([]),
     });}
@@ -44,6 +46,7 @@ export class EditMetadataComponent implements OnInit {
       this.metadataForm.controls['description'].setValue(metadata.description);
       this.setOpeningHours(metadata);
       this.setPrices(metadata);
+      this.logo = metadata.logo;
       this.loading = false;
     }, error => {
       this.error = true;
@@ -55,9 +58,9 @@ export class EditMetadataComponent implements OnInit {
   }
   addOpeningHours() {
     const openingHours = this.fb.group({
-      weekday: ['', Validators.required],
-      hours: ['', Validators.required],
-      info: ['', Validators.required]
+      weekday: [''],
+      hours: [''],
+      info: ['']
     });
     this.openingHoursForms.push(openingHours);
   }
@@ -71,8 +74,8 @@ export class EditMetadataComponent implements OnInit {
 
   addPrice() {
     const price = this.fb.group({
-      category: ['', Validators.required],
-      price: ['', Validators.required]
+      category: [''],
+      price: ['']
     });
 
     this.pricesForms.push(price);
@@ -83,7 +86,7 @@ export class EditMetadataComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.metadataForm.valid) {
+    if (this.metadataForm.valid && this.pricesForms.valid && this.openingHoursForms.valid) {
       this.service.putMetadata(this.metadataForm.value).subscribe({
         next: () => {
           console.log('Metadata changed!');
@@ -134,5 +137,9 @@ export class EditMetadataComponent implements OnInit {
   getPricesControls() {
     return (this.metadataForm.get('prices') as FormArray).controls;
   }
+
+  refreshLogo() {
+    this.logo = this.metadataForm.controls['logo'].value;
   }
+}
 

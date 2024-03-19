@@ -10,6 +10,7 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {NgForOf, NgIf} from "@angular/common";
 import {RouterOutlet} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'app-edit-attraction',
@@ -25,7 +26,8 @@ import {MatDialog} from "@angular/material/dialog";
     NgForOf,
     NgIf,
     ReactiveFormsModule,
-    RouterOutlet
+    RouterOutlet,
+    MatIcon
   ],
   templateUrl: './edit-attraction.component.html',
   styleUrl: './edit-attraction.component.scss'
@@ -36,16 +38,21 @@ export class EditAttractionComponent  implements OnInit{
   protected loading= true;
   error= false;
   protected attractionName: null | string | undefined ;
+  logo= '';
 
   constructor(private fb: FormBuilder, private service: ManagementService, private dialog: MatDialog) {
     this.attractionForm= this.fb.group({
-      name: ['', Validators.required],
-      logo: ['', Validators.required],
-      description: ['', Validators.required],
+      name: [''],
+      logo: [''],
+      description: [''],
       tours: this.fb.array([]),
       tags: this.fb.array([]),
 
     });
+  }
+
+  refreshLogo() {
+    this.logo = this.attractionForm.controls['logo'].value;
   }
   ngOnInit(): void {
     this.attractionName = this.getParameterByName('parameter');
@@ -97,7 +104,7 @@ export class EditAttractionComponent  implements OnInit{
 
   addTour() {
     const tour = this.fb.group({
-      tourName: ['', Validators.required],
+      tourName: [''],
     });
 
     this.tourForms.push(tour);
@@ -128,7 +135,7 @@ export class EditAttractionComponent  implements OnInit{
 
   addTag() {
     const tag = this.fb.group({
-      name: ['', Validators.required],
+      name: [''],
     });
 
     this.tagForms.push(tag);
