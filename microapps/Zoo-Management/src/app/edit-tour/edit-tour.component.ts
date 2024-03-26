@@ -41,9 +41,9 @@ export class EditTourComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private service: ManagementService) {
     this.tourForm = this.fb.group({
+      description: [''],
       name: [''],
       logo: [''],
-      description: [''],
       price: [''],
       attractions: this.fb.array([]),
     });

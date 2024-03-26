@@ -86,7 +86,10 @@ export class EditMetadataComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log("aufrug");
     if (this.metadataForm.valid && this.pricesForms.valid && this.openingHoursForms.valid) {
+      console.log("weiter");
+
       this.service.putMetadata(this.metadataForm.value).subscribe({
         next: () => {
           console.log('Metadata changed!');

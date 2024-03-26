@@ -44,10 +44,8 @@ export class EditAttractionComponent  implements OnInit{
     this.attractionForm= this.fb.group({
       name: [''],
       logo: [''],
-      description: [''],
-      tours: this.fb.array([]),
       tags: this.fb.array([]),
-
+      description: ['']
     });
   }
 
@@ -63,7 +61,6 @@ export class EditAttractionComponent  implements OnInit{
         this.attractionForm.controls['name'].setValue(attraction.name);
         this.attractionForm.controls['logo'].setValue(attraction.logo);
         this.attractionForm.controls['description'].setValue(attraction.description);
-        this.setTours(attraction);
         this.setTags(attraction);
         this.loading = false;
       }, error => {
@@ -84,37 +81,6 @@ export class EditAttractionComponent  implements OnInit{
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
-  }
-
-  private setTours(attraction: Attraction) {
-    const tourArray = this.attractionForm.get('tours') as FormArray;
-    tourArray.clear();
-
-    for (let i = 0; i < attraction.nearestTourNames.length; i++) {
-      const tourGroup = this.fb.group({
-        tour: [attraction.nearestTourNames[i]]
-      });
-      tourArray.push(tourGroup);
-    }
-  }
-
-  get tourForms() {
-    return this.attractionForm.get('tours') as FormArray;
-  }
-
-  addTour() {
-    const tour = this.fb.group({
-      tourName: [''],
-    });
-
-    this.tourForms.push(tour);
-  }
-
-  deleteTour(index: number) {
-    this.tourForms.removeAt(index);
-  }
-  getToursControls() {
-    return (this.attractionForm.get('tours') as FormArray).controls;
   }
 
   private setTags(attraction: Attraction) {

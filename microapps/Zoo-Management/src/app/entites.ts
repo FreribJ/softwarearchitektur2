@@ -2,7 +2,6 @@ export interface Attraction {
   name:String;
   logo: any;
   tags: String[];
-  nearestTourNames:String[];
   description: String;
 }
 export interface Tour{

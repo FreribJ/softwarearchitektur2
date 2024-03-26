@@ -33,14 +33,7 @@
         <img [src]="this.logo" alt="Logo" width="160" height="100"> <button  mat-raised-button color="accent" (click)="refreshLogo()"><mat-icon>refresh</mat-icon></button>
 
 
-        <div *ngFor="let tour of getToursControls(); let i = index">
 
-          <mat-form-field class="example-full-width">
-            <input matInput type="text"  placeholder="Name" [value]="tour.get('tourName')?.value">
-          </mat-form-field>
-          <button mat-raised-button color="warn" (click)="deleteTour(i)" class="delete-button">Delete</button>
-        </div>
-        <button mat-raised-button color="accent" type="button" (click)="addTour()" class="delete-button">Add Tour</button>
 
           <div *ngFor="let tag of getTagsControls(); let i = index">
             <mat-form-field class="example-full-width">
