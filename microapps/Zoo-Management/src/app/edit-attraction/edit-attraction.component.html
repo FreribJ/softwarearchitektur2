@@ -9,7 +9,6 @@
 <div class="container">
   <div>
     <div *ngIf="this.attractionForm" class="tile">
-      <div><h2>Die Attraktion bearbeiten</h2></div>
 
       <form [formGroup]="this.attractionForm" class="example-form" (ngSubmit)="onSubmit()">
         <div>
@@ -46,7 +45,6 @@
 <p>
         <button mat-raised-button color="primary" type="submit" class="delete-button"[disabled]="!attractionForm.valid">Ändern</button>
         <button mat-raised-button color="warn" type="button" class="delete-button"(click)="deleteAttraction()" *ngIf="this.attractionName!=null">Delete</button>
-        <button mat-raised-button color="accent" type="reset">Reset</button>
         </p>
       </form>
     </div>

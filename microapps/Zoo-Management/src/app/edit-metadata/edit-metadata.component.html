@@ -8,7 +8,6 @@
 <div class="container" *ngIf="!this.error && !this.loading">
   <div>
     <div *ngIf="this.metadataForm" class="tile">
-     <div> <h2>Die Metadaten ändern</h2></div>
 
       <form [formGroup]="this.metadataForm" class="example-form" (ngSubmit)="onSubmit()">
         <div>
@@ -71,8 +70,7 @@
         <button mat-raised-button color="accent" type="button" (click)="addPrice()" class="delete-button">Add Price</button>
         <p>
 
-        <button mat-raised-button color="accent" type="reset" class="delete-button">Reset</button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!metadataForm.valid">Ändern</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!metadataForm.valid">Speichern</button>
         </p>
       </form>
     </div>

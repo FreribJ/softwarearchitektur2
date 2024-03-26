@@ -22,17 +22,4 @@ export class AppComponent {
 
   constructor(private router: Router) {
   }
-  editTour() {
-     this.router.navigate(['/tourEdit']);
-  }
-
-  editAttraction() {
-    this.router.navigate(['/attractionEdit']);
-
-  }
-
-  editMetadata() {
-    this.router.navigate(['/metadataEdit']);
-
-  }
 }

@@ -33,8 +33,8 @@ export class EditMetadataComponent implements OnInit {
       logo: [''],
       address: [''],
       description: [''],
-      openingHours: this.fb.array([]),
       prices: this.fb.array([]),
+      openingHours: this.fb.array([]),
     });}
 
   ngOnInit(): void {
@@ -86,22 +86,22 @@ export class EditMetadataComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log("aufrug");
-    if (this.metadataForm.valid && this.pricesForms.valid && this.openingHoursForms.valid) {
-      console.log("weiter");
+    if (confirm("Are you sure to safe this Metadata?")) {
+      if (this.metadataForm.valid && this.pricesForms.valid && this.openingHoursForms.valid) {
+        console.log("weiter");
 
-      this.service.putMetadata(this.metadataForm.value).subscribe({
-        next: () => {
-          console.log('Metadata changed!');
+        this.service.putMetadata(this.metadataForm.value).subscribe({
+          next: () => {
+            console.log('Metadata changed!');
 
-        },
-        error: (error) => {
-          console.error('Error sending metadata:', error);
-        }
-      });
+          },
+          error: (error) => {
+            console.error('Error sending metadata:', error);
+          }
+        });
+      }
     }
   }
-
 
   private setOpeningHours(metadata: Metadata) {
     const openingHoursArray = this.metadataForm.get('openingHours') as FormArray;

@@ -8,7 +8,6 @@
 <div class="container" *ngIf="!this.error">
   <div>
     <div *ngIf="this.tourForm" class="tile">
-     <div> <h2>Die Tour bearbeiten</h2></div>
 
       <form [formGroup]="this.tourForm" class="example-form" (ngSubmit)="onSubmit()">
         <div>
@@ -38,15 +37,12 @@
         </div>
 
         <div *ngFor="let attraction of getAttractionsControls(); let i = index">
-          <mat-label>Tag:</mat-label>
           <mat-form-field class="example-full-width">
             <input matInput type="text"  placeholder="Name" [value]="attraction.get('attraction')?.value">
           </mat-form-field>
-          <mat-label>Beginn:</mat-label>
           <mat-form-field class="example-full-width">
           <input matInput type="text"  placeholder="Beginn" [value]="attraction.get('begin')?.value">
           </mat-form-field>
-          <mat-label>Ende:</mat-label>
           <mat-form-field class="example-full-width">
           <input matInput type="text"  placeholder="Ende" [value]="attraction.get('end')?.value">
           </mat-form-field>
@@ -55,8 +51,7 @@
         <button mat-raised-button color="accent" type="button" (click)="addAttraction()" class="delete-button">Add Attraction</button>
         <p>
         <button mat-raised-button color="warn" type="button" class="delete-button" (click)="deleteTour()" *ngIf="this.tourName!=null">Delete</button>
-        <button mat-raised-button color="accent" type="reset" class="delete-button">Reset</button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!tourForm.valid">Ändern</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!tourForm.valid">Speichern</button>
         </p>
       </form>
     </div>

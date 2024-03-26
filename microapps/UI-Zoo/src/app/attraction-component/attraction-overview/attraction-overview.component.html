@@ -11,12 +11,12 @@
 <div class="tile">
   <a [routerLink]="['/attraction-overview',this.attraction.name]" class="link">
     <div class="headline">{{ this.attraction.name }}
-      <span *ngIf="direktorModus==true">
+      <div *ngIf="direktorModus">
          <mat-icon class="rechts">
                <a href="http://localhost:81/attractionEdit?parameter={{this.attraction.name}}" class="link" target="_blank">
   edit</a>
          </mat-icon>
-       </span>
+       </div>
     </div>
 
     <div *ngIf="this.attraction.logo"><img [src]="this.attraction.logo" class="image"></div>

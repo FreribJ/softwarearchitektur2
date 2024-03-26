@@ -41,11 +41,11 @@ export class EditTourComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private service: ManagementService) {
     this.tourForm = this.fb.group({
-      description: [''],
       name: [''],
       logo: [''],
       price: [''],
-      attractions: this.fb.array([]),
+      description: [''],
+      attractions: this.fb.array([])
     });
   }
   refreshLogo() {
@@ -122,7 +122,9 @@ export class EditTourComponent implements OnInit {
 
   onSubmit() {
     if (this.tourForm.valid) {
-      if (this.tourName != null) {
+      if(confirm("Are you sure to safe this Tour?")) {
+
+        if (this.tourName != null) {
 
         this.service.putTour(this.tourForm.value, this.tourName).subscribe({
           next: () => {
@@ -144,12 +146,15 @@ export class EditTourComponent implements OnInit {
           }
         });
       }
+      }
     }
   }
 
   deleteTour() {
     if(this.tourName != null) {
-      this.service.deleteTour(this.tourName).subscribe({
+      if(confirm("Are you sure you want to delete this Tour?")) {
+
+        this.service.deleteTour(this.tourName).subscribe({
         next: () => {
           console.log('Attraction deleted!');
         },
@@ -157,6 +162,7 @@ export class EditTourComponent implements OnInit {
           console.error('Error deleting Attraction:', error);
         }
       });
+    }
     }
   }
 }

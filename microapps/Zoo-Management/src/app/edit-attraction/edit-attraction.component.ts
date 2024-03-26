@@ -43,9 +43,8 @@ export class EditAttractionComponent  implements OnInit{
   constructor(private fb: FormBuilder, private service: ManagementService, private dialog: MatDialog) {
     this.attractionForm= this.fb.group({
       name: [''],
-      logo: [''],
-      tags: this.fb.array([]),
-      description: ['']
+      logo: [''],description: [''],
+      tags: this.fb.array([])
     });
   }
 
@@ -116,7 +115,9 @@ export class EditAttractionComponent  implements OnInit{
 
   onSubmit() {
     if (this.attractionForm.valid) {
-      if (this.attractionName != null) {
+      if(confirm("Are you sure to safe this Tour?")) {
+
+        if (this.attractionName != null) {
         this.service.putAttraction(this.attractionForm.value, this.attractionName).subscribe({
           next: () => {
             console.log('Attraction changed!');
@@ -138,10 +139,11 @@ export class EditAttractionComponent  implements OnInit{
         });
       }
     }
-  }
+    }  }
 
   deleteAttraction() {
     if(this.attractionName != null) {
+      if(confirm("Are you sure you want to delete this Attraction?")) {
 this.service.deleteAttraction(this.attractionName).subscribe({
   next: () => {
     console.log('Attraction deleted!');
@@ -151,5 +153,6 @@ this.service.deleteAttraction(this.attractionName).subscribe({
   }
 });
   }
+    }
   }
 }

@@ -1,14 +1,15 @@
 export interface Attraction {
   name:String;
   logo: any;
-  tags: String[];
   description: String;
+  tags: String[];
+
 }
 export interface Tour{
-  description: String;
   name:String;
   logo: any;
   price:number;
+  description: String;
   attractions:TourAttraction[];
 }
 export interface TourAttraction{
@@ -20,9 +21,9 @@ export interface Metadata{
   name: String;
   logo: any;
   address: String;
-  openingHours: OpeningHours[];
-  prices:Prices[];
   description: String;
+  prices:Prices[];
+  openingHours: OpeningHours[];
 }
 
 export interface Prices{

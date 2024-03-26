@@ -8,7 +8,7 @@
   width: 300px;
   height: 600px;
   border-radius: 25px;
-  z-index: auto;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -25,6 +25,7 @@
 
 .rechts {
   float: right;
+  z-index: 2;
 }
 
 .image {
