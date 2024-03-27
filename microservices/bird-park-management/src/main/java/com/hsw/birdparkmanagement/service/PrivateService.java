@@ -80,10 +80,15 @@ public class PrivateService {
 
     @Transactional
     public void createAttraction(ROInAttraction roInAttraction) {
-        if (roInAttraction.getName() == null || roInAttraction.getName().isEmpty())
+        if (roInAttraction == null)
+            throw new BadArgumentException("Attraction cannot be null");
+        if (roInAttraction.getName() == null || roInAttraction.getName().isBlank())
             throw new BadArgumentException("Attraction name cannot be empty");
         if (this.attractionRepository.existsById(roInAttraction.getName()))
             throw new BadArgumentException("Attraction with name '" + roInAttraction.getName() + "' already exists");
+        if (roInAttraction.getTags() == null)
+            roInAttraction.setTags(new ArrayList<>());
+
         Attraction attraction = Attraction.builder()
                 .name(roInAttraction.getName())
                 .description(roInAttraction.getDescription())
@@ -95,15 +100,20 @@ public class PrivateService {
 
     @Transactional
     public void createTour(ROTour rotour) {
-        if (rotour.getName() == null || rotour.getName().isEmpty())
+        if (rotour == null)
+            throw new BadArgumentException("Tour cannot be null");
+        if (rotour.getName() == null || rotour.getName().isBlank())
             throw new BadArgumentException("Tour name cannot be empty");
         if (this.tourRepository.existsById(rotour.getName()))
             throw new BadArgumentException("Tour with name '" + rotour.getName() + "' already exists");
+        if (rotour.getAttractions() == null)
+            rotour.setAttractions(new ArrayList<>());
 
         Tour tour = Tour.builder()
                 .name(rotour.getName())
                 .description(rotour.getDescription())
                 .logo(rotour.getLogo())
+                .price(rotour.getPrice())
                 .build();
         List<SubAttraction> subAttractions = rotour.getAttractions().stream()
                 .map(roSubAttraction -> SubAttraction.builder()
@@ -120,6 +130,8 @@ public class PrivateService {
 
     @Transactional
     public void deleteAttraction(String name) {
+        if (name == null || name.isBlank())
+            throw new BadArgumentException("Name cannot be empty");
         if (!this.attractionRepository.existsById(name))
             throw new BadArgumentException("Attraction with name '" + name + "' does not exist");
         this.subAttractionRepository.deleteAllByAttractionToTour(name);
@@ -129,6 +141,8 @@ public class PrivateService {
 
     @Transactional
     public void deleteTour(String name) {
+        if (name == null || name.isBlank())
+            throw new BadArgumentException("Name cannot be empty");
         if (!this.tourRepository.existsById(name))
             throw new BadArgumentException("Tour with name '" + name + "' does not exist");
         this.subAttractionRepository.deleteAllByTour(name);
@@ -149,7 +163,7 @@ public class PrivateService {
         this.metadataRepository.findAll().forEach(data -> {
             switch (data.getM_name()) {
                 case "name":
-                    if (Objects.equals(data.getM_value(), roMetadata.getName()) || roMetadata.getName() == null || roMetadata.getName().isEmpty())
+                    if (Objects.equals(data.getM_value(), roMetadata.getName()) || roMetadata.getName() == null || roMetadata.getName().isBlank())
                         break;
                     data.setM_value(roMetadata.getName());
                     this.metadataRepository.save(data);
@@ -192,16 +206,18 @@ public class PrivateService {
 
     @Transactional
     public void updateAttraction(String name, ROInAttraction roattraction) {
-        if (name.isEmpty())
+        if (name.isBlank())
             throw new BadArgumentException("Name cannot be empty");
         if (roattraction == null)
             throw new BadArgumentException("Attraction cannot be null");
-        if (roattraction.getName() == null || roattraction.getName().isEmpty())
+        if (roattraction.getName() == null || roattraction.getName().isBlank())
             throw new BadArgumentException("Attraction name cannot be empty");
         if (!this.attractionRepository.existsById(name))
             throw new BadArgumentException("Attraction with name '" + name + "' does not exist");
+        if (roattraction.getTags() == null)
+            roattraction.setTags(new ArrayList<>());
         for (String tag : roattraction.getTags()) {
-            if (tag == null || tag.isEmpty())
+            if (tag == null || tag.isBlank())
                 throw new BadArgumentException("Tag cannot be empty");
         }
 
@@ -223,16 +239,18 @@ public class PrivateService {
 
     @Transactional
     public void updateTour(String name, ROTour rotour) {
-        if (name.isEmpty())
+        if (name.isBlank())
             throw new BadArgumentException("Name cannot be empty");
         if (!this.tourRepository.existsById(name))
             throw new BadArgumentException("Tour with name '" + name + "' does not exist");
         if (rotour == null)
             throw new BadArgumentException("Tour cannot be null");
-        if (rotour.getName() == null || rotour.getName().isEmpty())
+        if (rotour.getName() == null || rotour.getName().isBlank())
             throw new BadArgumentException("Tour name cannot be empty");
+        if (rotour.getAttractions() == null)
+            rotour.setAttractions(new ArrayList<>());
         for (ROSubAttraction attraction : rotour.getAttractions()) {
-            if (attraction.getAttraction() == null || attraction.getAttraction().isEmpty())
+            if (attraction.getAttraction() == null || attraction.getAttraction().isBlank())
                 throw new BadArgumentException("Attraction name cannot be empty");
         }
 

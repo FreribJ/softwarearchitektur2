@@ -1,16 +1,11 @@
 package com.hsw.birdparkmanagement;
 
 import com.hsw.birdparkmanagement.Exceptions.BadArgumentException;
-import com.hsw.birdparkmanagement.model.database.Attraction;
-import com.hsw.birdparkmanagement.model.database.Metadata;
-import com.hsw.birdparkmanagement.model.database.SubAttraction;
-import com.hsw.birdparkmanagement.model.database.Tour;
+import com.hsw.birdparkmanagement.model.database.*;
 import com.hsw.birdparkmanagement.model.ui.ROOutAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROMetadata;
 import com.hsw.birdparkmanagement.model.ui.ROTour;
-import com.hsw.birdparkmanagement.repository.AttractionRepository;
-import com.hsw.birdparkmanagement.repository.MetadataRepository;
-import com.hsw.birdparkmanagement.repository.TourRepository;
+import com.hsw.birdparkmanagement.repository.*;
 import com.hsw.birdparkmanagement.service.PublicService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -32,7 +27,7 @@ public class PublicServiceTests {
     private PublicService publicService;
 
     @BeforeAll
-    static void setup(@Autowired MetadataRepository metadataRepository, @Autowired AttractionRepository attractionRepository, @Autowired TourRepository tourRepository) {
+    static void setup(@Autowired MetadataRepository metadataRepository, @Autowired AttractionRepository attractionRepository, @Autowired TourRepository tourRepository, @Autowired AttractionTagRepository attractionTagRepository, @Autowired SubAttractionRepository subAttractionRepository) {
         List<Metadata> metadata = new ArrayList<>();
         metadata.add(Metadata.builder().m_name("name").m_type("String").m_value("parkName").build());
         metadata.add(Metadata.builder().m_name("description").m_type("String").m_value("parkDescription").build());
@@ -44,23 +39,32 @@ public class PublicServiceTests {
         metadataRepository.saveAll(metadata);
 
         List<Attraction> attractions = new ArrayList<>();
-//        attractions.add(Attraction.builder().name("attractionName1").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png/").build());
-//        attractions.add(Attraction.builder().name("attractionName2").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png/").build());
-//        attractions.add(Attraction.builder().name("attractionName3").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png/").build());
+        attractions.add(Attraction.builder().name("attractionName1").description("attractionDescription").logo("https://www.attractionLogo.png").build());
+        attractions.add(Attraction.builder().name("attractionName2").description("attractionDescription").logo("https://www.attractionLogo.png").build());
+        attractions.add(Attraction.builder().name("attractionName3").description("attractionDescription").logo("https://www.attractionLogo.png").build());
 
+        List<AttractionTag> attractionTags = new ArrayList<>();
+        attractionTags.add(AttractionTag.builder().attractionName("attractionName1").tag("tag1").build());
+        attractionTags.add(AttractionTag.builder().attractionName("attractionName1").tag("tag2").build());
+        attractionTags.add(AttractionTag.builder().attractionName("attractionName2").tag("tag1").build());
+        attractionTags.add(AttractionTag.builder().attractionName("attractionName3").tag("tag2").build());
+        attractionTags.add(AttractionTag.builder().attractionName("attractionName3").tag("tag3").build());
+
+        attractionTagRepository.saveAll(attractionTags);
         attractionRepository.saveAll(attractions);
 
         List<Tour> tours = new ArrayList<>();
-//        tours.add(Tour.builder().name("tourName1").description("tourDescription").logo("https://www.tourLogo.png/").price(12).subAttractions(List.of(
-//                SubAttraction.builder().attraction(attractions.get(0).getName()).starttime("9:00").endtime("10:00").build(),
-//                SubAttraction.builder().attraction(attractions.get(1).getName()).starttime("10:00").endtime("11:00").build(),
-//                SubAttraction.builder().attraction(attractions.get(2).getName()).starttime("11:00").endtime("12:00").build()
-//        )).build());
+        List<SubAttraction> subAttractions = new ArrayList<>();
+        tours.add(Tour.builder().name("tourName1").description("tourDescription").logo("https://www.tourLogo.png").price(12).build());
+        subAttractions.add(SubAttraction.builder().starttime("10:00").endtime("11:00").tour("tourName1").attractionToTour("attractionName1").build());
+        subAttractions.add(SubAttraction.builder().starttime("11:00").endtime("12:00").tour("tourName1").attractionToTour("attractionName2").build());
+        subAttractions.add(SubAttraction.builder().starttime("12:00").endtime("13:00").tour("tourName1").attractionToTour("attractionName3").build());
 
-//        tours.add(Tour.builder().name("tourName2").description("tourDescription").logo("https://www.tourLogo.png/").price(12).subAttractions(List.of(
-//        )).build());
+        tours.add(Tour.builder().name("tourName2").description("tourDescription").logo("https://www.tourLogo.png").price(12).build());
+        subAttractions.add(SubAttraction.builder().starttime("10:00").endtime("11:00").tour("tourName2").attractionToTour("attractionName1").build());
 
         tourRepository.saveAll(tours);
+        subAttractionRepository.saveAll(subAttractions);
     }
 
     @Test
@@ -75,10 +79,10 @@ public class PublicServiceTests {
     @Test
     void testGetTour() {
         ROTour tour = publicService.getTour("tourName1");
-        assertEquals("tourName", tour.getName());
-        assertEquals("https://www.tourLogo.png/", tour.getLogo());
+        assertEquals("tourName1", tour.getName());
+        assertEquals("https://www.tourLogo.png", tour.getLogo());
         assertEquals(12, tour.getPrice());
-        assertEquals(3, tour.getAttractions().size());
+        assertEquals(6, tour.getAttractions().size());
         assertEquals("attractionName1", tour.getAttractions().get(0).getAttraction());
     }
 
@@ -86,9 +90,9 @@ public class PublicServiceTests {
     void testGetAttraction() {
         ROOutAttraction attraction = publicService.getAttraction("attractionName1");
         assertEquals("attractionName1", attraction.getName());
-        assertEquals("https://www.attractionLogo.png/", attraction.getLogo());
+        assertEquals("https://www.attractionLogo.png", attraction.getLogo());
         assertEquals("attractionDescription", attraction.getDescription());
-        assertEquals("Tag1", attraction.getTags().get(0));
+        assertEquals("tag1", attraction.getTags().get(0));
     }
 
     @Test

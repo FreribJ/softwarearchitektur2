@@ -96,7 +96,7 @@ public class PublicService {
     }
 
     public ROOutAttraction getAttraction(String name) {
-        if (name == null || name.isEmpty()) {
+        if (name == null || name.isBlank()) {
             throw new BadArgumentException("Name cannot be empty");
         }
         return this.convertAttraction(this.attractionRepository.findById(name).orElseThrow(() -> new NotFoundException("Attraction")));
@@ -136,7 +136,7 @@ public class PublicService {
     }
 
     public ROTour getTour(String name) {
-        if (name == null || name.isEmpty()) {
+        if (name == null || name.isBlank()) {
             throw new BadArgumentException("Name cannot be empty");
         }
         return this.convertTour(this.tourRepository.findById(name).orElseThrow(() -> new NotFoundException("Tour")));
