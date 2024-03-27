@@ -1,8 +1,7 @@
 package com.hsw.birdparkmanagement.api.ui;
 
-import com.hsw.birdparkmanagement.model.database.Attraction;
-import com.hsw.birdparkmanagement.model.database.Tour;
-import com.hsw.birdparkmanagement.model.ui.ROAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROInAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROOutAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROTour;
 import com.hsw.birdparkmanagement.service.PrivateService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,8 +25,8 @@ public class ProtectedPost {
     @Operation(summary = "Create a new attraction")
     @ApiResponse(responseCode = "200", description = "Attraction created")
     @PostMapping("/attraction")
-    public void createAttraction(@Parameter(description = "New attraction") @RequestBody ROAttraction roAttraction) {
-        this.privateService.createAttraction(roAttraction);
+    public void createAttraction(@Parameter(description = "New attraction") @RequestBody ROInAttraction roInAttraction) {
+        this.privateService.createAttraction(roInAttraction);
     }
 
     @Operation(summary = "Create a new tour")

@@ -7,7 +7,8 @@ import com.hsw.birdparkmanagement.model.database.Attraction;
 import com.hsw.birdparkmanagement.model.database.Metadata;
 import com.hsw.birdparkmanagement.model.database.SubAttraction;
 import com.hsw.birdparkmanagement.model.database.Tour;
-import com.hsw.birdparkmanagement.model.ui.ROAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROInAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROOutAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROMetadata;
 import com.hsw.birdparkmanagement.model.ui.ROTour;
 import com.hsw.birdparkmanagement.repository.AttractionRepository;
@@ -70,16 +71,16 @@ public class PrivateService {
         }
     }
 
-    public void createAttraction(ROAttraction roattraction) {
-        if(roattraction.getName() == null || roattraction.getName().isEmpty())
+    public void createAttraction(ROInAttraction roInAttraction) {
+        if(roInAttraction.getName() == null || roInAttraction.getName().isEmpty())
             throw new BadArgumentException("Attraction name cannot be empty");
-        if (this.attractionRepository.existsById(roattraction.getName()))
-            throw new BadArgumentException("Attraction with name '" + roattraction.getName() + "' already exists");
+        if (this.attractionRepository.existsById(roInAttraction.getName()))
+            throw new BadArgumentException("Attraction with name '" + roInAttraction.getName() + "' already exists");
         Attraction attraction = Attraction.builder()
-                .name(roattraction.getName())
-                .description(roattraction.getDescription())
-                .logo(roattraction.getLogo())
-                .tags(roattraction.getTags())
+                .name(roInAttraction.getName())
+                .description(roInAttraction.getDescription())
+                .logo(roInAttraction.getLogo())
+                .tags(roInAttraction.getTags())
                 .build();
         this.attractionRepository.save(attraction);
     }
@@ -176,7 +177,7 @@ public class PrivateService {
 
     //TODO: abhängige Attraktionen auch aktualisieren
     @Transactional
-    public void updateAttraction(String name, ROAttraction roattraction) {
+    public void updateAttraction(String name, ROInAttraction roattraction) {
         if (name.isEmpty())
             throw new BadArgumentException("Name cannot be empty");
         if (roattraction == null)

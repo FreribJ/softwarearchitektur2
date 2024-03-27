@@ -5,7 +5,8 @@ import com.hsw.birdparkmanagement.model.database.Attraction;
 import com.hsw.birdparkmanagement.model.database.Metadata;
 import com.hsw.birdparkmanagement.model.database.SubAttraction;
 import com.hsw.birdparkmanagement.model.database.Tour;
-import com.hsw.birdparkmanagement.model.ui.ROAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROInAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROOutAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROTour;
 import com.hsw.birdparkmanagement.repository.AttractionRepository;
 import com.hsw.birdparkmanagement.repository.MetadataRepository;
@@ -14,8 +15,6 @@ import com.hsw.birdparkmanagement.service.PrivateService;
 import com.hsw.birdparkmanagement.service.PublicService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -70,10 +69,10 @@ public class PrivateServiceTests {
     @Test
     void testCreateAttraction() {
         assertThrows(BadArgumentException.class, () -> privateService.createAttraction(null));
-        assertThrows(BadArgumentException.class, () -> privateService.createAttraction(ROAttraction.builder().name("").build()));
-        assertThrows(BadArgumentException.class, () -> privateService.createAttraction(ROAttraction.builder().name("alreadyTakenName").build()));
+        assertThrows(BadArgumentException.class, () -> privateService.createAttraction(ROInAttraction.builder().name("").build()));
+        assertThrows(BadArgumentException.class, () -> privateService.createAttraction(ROInAttraction.builder().name("alreadyTakenName").build()));
 
-        ROAttraction newAttraction = ROAttraction.builder().name("newAttraction").build();
+        ROInAttraction newAttraction = ROInAttraction.builder().name("newAttraction").build();
         privateService.createAttraction(newAttraction);
         assertEquals(publicService.getAttraction("newAttraction"), newAttraction);
     }

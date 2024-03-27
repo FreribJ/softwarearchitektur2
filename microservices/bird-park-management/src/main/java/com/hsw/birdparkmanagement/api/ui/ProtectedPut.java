@@ -1,6 +1,7 @@
 package com.hsw.birdparkmanagement.api.ui;
 
-import com.hsw.birdparkmanagement.model.ui.ROAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROInAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROOutAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROMetadata;
 import com.hsw.birdparkmanagement.model.ui.ROTour;
 import com.hsw.birdparkmanagement.service.PrivateService;
@@ -33,8 +34,8 @@ public class ProtectedPut {
     @Operation(summary = "Modify attraction")
     @ApiResponse(responseCode = "200", description = "Attraction modified")
     @PutMapping("/attraction/{name}")
-    public void modifyAttraction(@Parameter(description = "Name of the attraction") @PathVariable String name,  @Parameter(description = "Edited attraction") @RequestBody ROAttraction roattraction) {
-        this.privateService.updateAttraction(name, roattraction);
+    public void modifyAttraction(@Parameter(description = "Name of the attraction") @PathVariable String name,  @Parameter(description = "Edited attraction") @RequestBody ROInAttraction roInAttraction) {
+        this.privateService.updateAttraction(name, roInAttraction);
     }
 
     @Operation(summary = "Modify metadata")

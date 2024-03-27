@@ -6,7 +6,7 @@ import com.hsw.birdparkmanagement.Exceptions.NotFoundException;
 import com.hsw.birdparkmanagement.model.database.Attraction;
 import com.hsw.birdparkmanagement.model.database.SubAttraction;
 import com.hsw.birdparkmanagement.model.database.Tour;
-import com.hsw.birdparkmanagement.model.ui.ROAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROOutAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROMetadata;
 import com.hsw.birdparkmanagement.model.ui.ROSubAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROTour;
@@ -73,12 +73,12 @@ public class PublicService {
 
 
     //Attractions
-    private ROAttraction convertAttraction(Attraction attraction) {
+    private ROOutAttraction convertAttraction(Attraction attraction) {
         if (attraction == null) {
             return null;
         }
         List<String> nearestTourNames = this.tourRepository.findAllByAttractionName(attraction.getName());
-        return ROAttraction.builder()
+        return ROOutAttraction.builder()
                 .name(attraction.getName())
                 .logo(attraction.getLogo())
                 .tags(attraction.getTags())
@@ -87,12 +87,12 @@ public class PublicService {
     }
 
     //TODO: Mit ResponeEntity ausprobieren
-    public List<ROAttraction> getAllAttractions() {
+    public List<ROOutAttraction> getAllAttractions() {
         return this.attractionRepository.findAll().stream().map(this::convertAttraction
         ).collect(Collectors.toList());
     }
 
-    public ROAttraction getAttraction(String name) {
+    public ROOutAttraction getAttraction(String name) {
         if (name == null || name.isEmpty()) {
             throw new BadArgumentException("Name cannot be empty");
         }

@@ -1,9 +1,6 @@
 package com.hsw.birdparkmanagement.api.ui;
 
-import com.hsw.birdparkmanagement.Exceptions.BirdparkException;
-import com.hsw.birdparkmanagement.model.database.Attraction;
-import com.hsw.birdparkmanagement.model.database.Tour;
-import com.hsw.birdparkmanagement.model.ui.ROAttraction;
+import com.hsw.birdparkmanagement.model.ui.ROOutAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROMetadata;
 import com.hsw.birdparkmanagement.model.ui.ROTour;
 import com.hsw.birdparkmanagement.service.PublicService;
@@ -16,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Tag(name = "Get", description = "Get Endpoints for the bird park management system")
@@ -41,14 +37,14 @@ public class PublicGet {
     @Operation(summary = "Get all attractions in the bird park")
     @ApiResponse(responseCode = "200", description = "All attractions in the bird park")
     @GetMapping("/attractions")
-    public List<ROAttraction> attractions() {
+    public List<ROOutAttraction> attractions() {
         return this.publicService.getAllAttractions();
     }
 
     @Operation(summary = "Get specific attraction in the bird park")
     @ApiResponse(responseCode = "200", description = "Specific attraction in the bird park")
     @GetMapping("/attraction/{name}")
-    public ROAttraction attraction(@Parameter(description = "Name of the attraction") @PathVariable String name) {
+    public ROOutAttraction attraction(@Parameter(description = "Name of the attraction") @PathVariable String name) {
         return this.publicService.getAttraction(name);
     }
 
