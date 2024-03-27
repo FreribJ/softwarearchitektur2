@@ -3,17 +3,12 @@ package com.hsw.birdparkmanagement.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hsw.birdparkmanagement.Exceptions.BadArgumentException;
 import com.hsw.birdparkmanagement.Exceptions.UnexpectedErrorException;
-import com.hsw.birdparkmanagement.model.database.Attraction;
-import com.hsw.birdparkmanagement.model.database.Metadata;
-import com.hsw.birdparkmanagement.model.database.SubAttraction;
-import com.hsw.birdparkmanagement.model.database.Tour;
+import com.hsw.birdparkmanagement.model.database.*;
 import com.hsw.birdparkmanagement.model.ui.ROInAttraction;
-import com.hsw.birdparkmanagement.model.ui.ROOutAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROMetadata;
+import com.hsw.birdparkmanagement.model.ui.ROSubAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROTour;
-import com.hsw.birdparkmanagement.repository.AttractionRepository;
-import com.hsw.birdparkmanagement.repository.MetadataRepository;
-import com.hsw.birdparkmanagement.repository.TourRepository;
+import com.hsw.birdparkmanagement.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class PrivateService {
@@ -29,13 +23,17 @@ public class PrivateService {
     AttractionRepository attractionRepository;
     TourRepository tourRepository;
     MetadataRepository metadataRepository;
+    SubAttractionRepository subAttractionRepository;
+    AttractionTagRepository attractionTagRepository;
     ObjectMapper mapper;
 
     @Autowired
-    public PrivateService(AttractionRepository attractionRepository, TourRepository tourRepository, MetadataRepository metadataRepository) {
+    public PrivateService(AttractionRepository attractionRepository, TourRepository tourRepository, MetadataRepository metadataRepository, SubAttractionRepository subAttractionRepository, AttractionTagRepository attractionTagRepository) {
         this.attractionRepository = attractionRepository;
         this.tourRepository = tourRepository;
         this.metadataRepository = metadataRepository;
+        this.subAttractionRepository = subAttractionRepository;
+        this.attractionTagRepository = attractionTagRepository;
         this.mapper = new ObjectMapper();
 
         //Initial Database setup
@@ -51,28 +49,38 @@ public class PrivateService {
             this.metadataRepository.saveAll(metadata);
 
             List<Attraction> attractions = new ArrayList<>();
-            attractions.add(Attraction.builder().name("attractionName1").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png").build());
-            attractions.add(Attraction.builder().name("attractionName2").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png").build());
-            attractions.add(Attraction.builder().name("attractionName3").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png").build());
+            attractions.add(Attraction.builder().name("attractionName1").description("attractionDescription").logo("https://www.attractionLogo.png").build());
+            attractions.add(Attraction.builder().name("attractionName2").description("attractionDescription").logo("https://www.attractionLogo.png").build());
+            attractions.add(Attraction.builder().name("attractionName3").description("attractionDescription").logo("https://www.attractionLogo.png").build());
 
-            attractionRepository.saveAll(attractions);
+            List<AttractionTag> attractionTags = new ArrayList<>();
+            attractionTags.add(AttractionTag.builder().attractionName("attractionName1").tag("tag1").build());
+            attractionTags.add(AttractionTag.builder().attractionName("attractionName1").tag("tag2").build());
+            attractionTags.add(AttractionTag.builder().attractionName("attractionName2").tag("tag1").build());
+            attractionTags.add(AttractionTag.builder().attractionName("attractionName3").tag("tag2").build());
+            attractionTags.add(AttractionTag.builder().attractionName("attractionName3").tag("tag3").build());
+
+            this.attractionTagRepository.saveAll(attractionTags);
+            this.attractionRepository.saveAll(attractions);
 
             List<Tour> tours = new ArrayList<>();
-            tours.add(Tour.builder().name("tourName1").description("tourDescription").logo("https://www.tourLogo.png").price(12).subAttractions(List.of(
-                    SubAttraction.builder().attraction(attractions.get(0)).starttime("9:00").endtime("10:00").build(),
-                    SubAttraction.builder().attraction(attractions.get(1)).starttime("10:00").endtime("11:00").build(),
-                    SubAttraction.builder().attraction(attractions.get(2)).starttime("11:00").endtime("12:00").build()
-            )).build());
+            List<SubAttraction> subAttractions = new ArrayList<>();
+            tours.add(Tour.builder().name("tourName1").description("tourDescription").logo("https://www.tourLogo.png").price(12).build());
+            subAttractions.add(SubAttraction.builder().starttime("10:00").endtime("11:00").tour("tourName1").attractionToTour("attractionName1").build());
+            subAttractions.add(SubAttraction.builder().starttime("11:00").endtime("12:00").tour("tourName1").attractionToTour("attractionName2").build());
+            subAttractions.add(SubAttraction.builder().starttime("12:00").endtime("13:00").tour("tourName1").attractionToTour("attractionName3").build());
 
-            tours.add(Tour.builder().name("tourName2").description("tourDescription").logo("https://www.tourLogo.png").price(12).subAttractions(List.of(
-            )).build());
+            tours.add(Tour.builder().name("tourName2").description("tourDescription").logo("https://www.tourLogo.png").price(12).build());
+            subAttractions.add(SubAttraction.builder().starttime("10:00").endtime("11:00").tour("tourName2").attractionToTour("attractionName1").build());
 
-            tourRepository.saveAll(tours);
+            this.tourRepository.saveAll(tours);
+            this.subAttractionRepository.saveAll(subAttractions);
         }
     }
 
+    @Transactional
     public void createAttraction(ROInAttraction roInAttraction) {
-        if(roInAttraction.getName() == null || roInAttraction.getName().isEmpty())
+        if (roInAttraction.getName() == null || roInAttraction.getName().isEmpty())
             throw new BadArgumentException("Attraction name cannot be empty");
         if (this.attractionRepository.existsById(roInAttraction.getName()))
             throw new BadArgumentException("Attraction with name '" + roInAttraction.getName() + "' already exists");
@@ -80,13 +88,14 @@ public class PrivateService {
                 .name(roInAttraction.getName())
                 .description(roInAttraction.getDescription())
                 .logo(roInAttraction.getLogo())
-                .tags(roInAttraction.getTags())
                 .build();
+        this.attractionTagRepository.saveAll(roInAttraction.getTags().stream().map(tag -> AttractionTag.builder().attractionName(roInAttraction.getName()).tag(tag).build()).toList());
         this.attractionRepository.save(attraction);
     }
 
+    @Transactional
     public void createTour(ROTour rotour) {
-        if(rotour.getName() == null || rotour.getName().isEmpty())
+        if (rotour.getName() == null || rotour.getName().isEmpty())
             throw new BadArgumentException("Tour name cannot be empty");
         if (this.tourRepository.existsById(rotour.getName()))
             throw new BadArgumentException("Tour with name '" + rotour.getName() + "' already exists");
@@ -95,28 +104,34 @@ public class PrivateService {
                 .name(rotour.getName())
                 .description(rotour.getDescription())
                 .logo(rotour.getLogo())
-                .subAttractions(rotour.getAttractions().stream()
-                        .map(roSubAttraction -> SubAttraction.builder()
-                                .starttime(roSubAttraction.getBegin())
-                                .endtime(roSubAttraction.getEnd())
-                                .attraction(this.attractionRepository.findById(roSubAttraction.getAttraction()).orElseThrow(() ->
-                                        new IllegalStateException("Attraction with name '" + roSubAttraction.getAttraction() + "' does not exist")
-                                )).build())
-                        .collect(Collectors.toList()))
                 .build();
+        List<SubAttraction> subAttractions = rotour.getAttractions().stream()
+                .map(roSubAttraction -> SubAttraction.builder()
+                        .starttime(roSubAttraction.getBegin())
+                        .endtime(roSubAttraction.getEnd())
+                        .tour(rotour.getName())
+                        .attractionToTour(this.attractionRepository.findById(roSubAttraction.getAttraction()).orElseThrow(() ->
+                                new BadArgumentException("Attraction with name " + roSubAttraction.getAttraction() + " does not exist")
+                        ).getName()).build())
+                .toList();
         this.tourRepository.save(tour);
+        this.subAttractionRepository.saveAll(subAttractions);
     }
 
-    //TODO: Abhängigkeiten lassen sich nicht löschen!
+    @Transactional
     public void deleteAttraction(String name) {
         if (!this.attractionRepository.existsById(name))
             throw new BadArgumentException("Attraction with name '" + name + "' does not exist");
+        this.subAttractionRepository.deleteAllByAttractionToTour(name);
+        this.attractionTagRepository.deleteAllByAttractionName(name);
         this.attractionRepository.deleteById(name);
     }
 
+    @Transactional
     public void deleteTour(String name) {
         if (!this.tourRepository.existsById(name))
             throw new BadArgumentException("Tour with name '" + name + "' does not exist");
+        this.subAttractionRepository.deleteAllByTour(name);
         this.tourRepository.deleteById(name);
     }
 
@@ -175,7 +190,6 @@ public class PrivateService {
         });
     }
 
-    //TODO: abhängige Attraktionen auch aktualisieren
     @Transactional
     public void updateAttraction(String name, ROInAttraction roattraction) {
         if (name.isEmpty())
@@ -186,39 +200,65 @@ public class PrivateService {
             throw new BadArgumentException("Attraction name cannot be empty");
         if (!this.attractionRepository.existsById(name))
             throw new BadArgumentException("Attraction with name '" + name + "' does not exist");
+        for (String tag : roattraction.getTags()) {
+            if (tag == null || tag.isEmpty())
+                throw new BadArgumentException("Tag cannot be empty");
+        }
 
         Attraction attraction = Attraction.builder()
                 .name(roattraction.getName())
                 .description(roattraction.getDescription())
                 .logo(roattraction.getLogo())
-                .tags(roattraction.getTags())
                 .build();
-        if (!Objects.equals(name, roattraction.getName()))
+
+        this.attractionTagRepository.deleteAllByAttractionName(name);
+        this.attractionTagRepository.saveAll(roattraction.getTags().stream().map(tag -> AttractionTag.builder().attractionName(roattraction.getName()).tag(tag).build()).toList());
+        if (!Objects.equals(name, roattraction.getName())) {
             this.attractionRepository.updateName(name, roattraction.getName());
+            this.subAttractionRepository.updateAllByAttractionToTourName(name, roattraction.getName());
+            this.attractionTagRepository.updateAllByAttractionName(name, roattraction.getName());
+        }
         this.attractionRepository.save(attraction);
     }
 
-    //    TODO: abhängige Touren auch aktualisieren
+    @Transactional
     public void updateTour(String name, ROTour rotour) {
+        if (name.isEmpty())
+            throw new BadArgumentException("Name cannot be empty");
         if (!this.tourRepository.existsById(name))
             throw new BadArgumentException("Tour with name '" + name + "' does not exist");
+        if (rotour == null)
+            throw new BadArgumentException("Tour cannot be null");
+        if (rotour.getName() == null || rotour.getName().isEmpty())
+            throw new BadArgumentException("Tour name cannot be empty");
+        for (ROSubAttraction attraction : rotour.getAttractions()) {
+            if (attraction.getAttraction() == null || attraction.getAttraction().isEmpty())
+                throw new BadArgumentException("Attraction name cannot be empty");
+        }
 
         Tour tour = Tour.builder()
                 .name(rotour.getName())
                 .description(rotour.getDescription())
                 .logo(rotour.getLogo())
-                .subAttractions(rotour.getAttractions().stream()
-                        .map(roSubAttraction -> SubAttraction.builder()
-                                .starttime(roSubAttraction.getBegin())
-                                .endtime(roSubAttraction.getEnd())
-                                .attraction(this.attractionRepository.findById(roSubAttraction.getAttraction()).orElseThrow(() ->
-                                        new BadArgumentException("Attraction with name " + roSubAttraction.getAttraction() + " does not exist")
-                                )).build())
-                        .collect(Collectors.toList()))
                 .build();
 
-        if (!Objects.equals(name, rotour.getName()))
+        this.subAttractionRepository.deleteAllByTour(name);
+        List<SubAttraction> subAttractions = rotour.getAttractions().stream()
+                .map(roSubAttraction -> SubAttraction.builder()
+                        .starttime(roSubAttraction.getBegin())
+                        .endtime(roSubAttraction.getEnd())
+                        .tour(rotour.getName())
+                        .attractionToTour(this.attractionRepository.findById(roSubAttraction.getAttraction()).orElseThrow(() ->
+                                new BadArgumentException("Attraction with name " + roSubAttraction.getAttraction() + " does not exist")
+                        ).getName()).build())
+                .toList();
+
+        if (!Objects.equals(name, rotour.getName())) {
             this.tourRepository.updateName(name, rotour.getName());
+            this.subAttractionRepository.updateAllByAttractionToTourName(name, rotour.getName());
+        }
+
+        this.subAttractionRepository.saveAll(subAttractions);
         this.tourRepository.save(tour);
     }
 }

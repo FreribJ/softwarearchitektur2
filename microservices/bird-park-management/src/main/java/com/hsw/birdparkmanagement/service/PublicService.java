@@ -4,15 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hsw.birdparkmanagement.Exceptions.BadArgumentException;
 import com.hsw.birdparkmanagement.Exceptions.NotFoundException;
 import com.hsw.birdparkmanagement.model.database.Attraction;
+import com.hsw.birdparkmanagement.model.database.AttractionTag;
 import com.hsw.birdparkmanagement.model.database.SubAttraction;
 import com.hsw.birdparkmanagement.model.database.Tour;
 import com.hsw.birdparkmanagement.model.ui.ROOutAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROMetadata;
 import com.hsw.birdparkmanagement.model.ui.ROSubAttraction;
 import com.hsw.birdparkmanagement.model.ui.ROTour;
-import com.hsw.birdparkmanagement.repository.AttractionRepository;
-import com.hsw.birdparkmanagement.repository.MetadataRepository;
-import com.hsw.birdparkmanagement.repository.TourRepository;
+import com.hsw.birdparkmanagement.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +24,16 @@ public class PublicService {
     private MetadataRepository metadataRepository;
     private AttractionRepository attractionRepository;
     private TourRepository tourRepository;
+    private SubAttractionRepository subAttractionRepository;
+    private AttractionTagRepository attractionTagRepository;
 
     @Autowired
-    public PublicService(MetadataRepository metadataRepository, AttractionRepository attractionRepository, TourRepository tourRepository) {
+    public PublicService(MetadataRepository metadataRepository, AttractionRepository attractionRepository, TourRepository tourRepository, SubAttractionRepository subAttractionRepository, AttractionTagRepository attractionTagRepository) {
         this.metadataRepository = metadataRepository;
         this.attractionRepository = attractionRepository;
         this.tourRepository = tourRepository;
+        this.subAttractionRepository = subAttractionRepository;
+        this.attractionTagRepository = attractionTagRepository;
     }
 
 
@@ -77,11 +80,11 @@ public class PublicService {
         if (attraction == null) {
             return null;
         }
-        List<String> nearestTourNames = this.tourRepository.findAllByAttractionName(attraction.getName());
+        List<String> nearestTourNames = this.subAttractionRepository.findAllByAttractionToTour(attraction.getName()).stream().map(SubAttraction::getTour).collect(Collectors.toList());
         return ROOutAttraction.builder()
                 .name(attraction.getName())
                 .logo(attraction.getLogo())
-                .tags(attraction.getTags())
+                .tags(this.attractionTagRepository.findAllByAttractionName(attraction.getName()).stream().map(AttractionTag::getTag).collect(Collectors.toList()))
                 .description(attraction.getDescription())
                 .nearestTourNames(nearestTourNames).build();
     }
@@ -112,7 +115,7 @@ public class PublicService {
         return ROSubAttraction.builder()
                 .end(subAttraction.getEndtime())
                 .begin(subAttraction.getStarttime())
-                .attraction(subAttraction.getAttraction().getName()).build();
+                .attraction(subAttraction.getAttractionToTour()).build();
     }
 
     private ROTour convertTour(Tour tour) {
@@ -124,7 +127,7 @@ public class PublicService {
                 .logo(tour.getLogo())
                 .price(tour.getPrice())
                 .description(tour.getDescription())
-                .attractions(tour.getSubAttractions().stream().map(this::convertSubAttraction).collect(Collectors.toList())).build();
+                .attractions(this.subAttractionRepository.findAllByTour(tour.getName()).stream().map(this::convertSubAttraction).collect(Collectors.toList())).build();
     }
 
     public List<ROTour> getAllTours() {

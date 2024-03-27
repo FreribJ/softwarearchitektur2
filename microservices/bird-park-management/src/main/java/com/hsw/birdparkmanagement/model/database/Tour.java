@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 public class Tour {
 
     public Tour(ROTour roTour) {
@@ -30,7 +29,4 @@ public class Tour {
     String logo;
     String description;
     double price;
-
-    @OneToMany(cascade = CascadeType.ALL) //TODO: , orphanRemoval = true testen optional [notNull] = true;; Eine seite Braucht mapped by, die andere @JoinColumn
-    List<SubAttraction> subAttractions;
 }

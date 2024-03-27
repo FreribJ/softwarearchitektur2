@@ -26,11 +26,5 @@ public class Attraction {
 
     String logo;
 
-    @Cascade({CascadeType.ALL})
-    @ElementCollection
-    List<String> tags;
-
-
     String description;
-
 }

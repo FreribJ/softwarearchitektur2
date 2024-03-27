@@ -48,21 +48,21 @@ public class PrivateServiceTests {
         metadataRepository.saveAll(metadata);
 
         List<Attraction> attractions = new ArrayList<>();
-        attractions.add(Attraction.builder().name("attractionName1").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png/").build());
-        attractions.add(Attraction.builder().name("attractionName2").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png/").build());
-        attractions.add(Attraction.builder().name("attractionName3").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png/").build());
+//        attractions.add(Attraction.builder().name("attractionName1").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png/").build());
+//        attractions.add(Attraction.builder().name("attractionName2").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png/").build());
+//        attractions.add(Attraction.builder().name("attractionName3").description("attractionDescription").tags(List.of("Tag1", "Tag2", "Tag3")).logo("https://www.attractionLogo.png/").build());
 
         attractionRepository.saveAll(attractions);
 
         List<Tour> tours = new ArrayList<>();
-        tours.add(Tour.builder().name("tourName1").description("tourDescription").logo("https://www.tourLogo.png/").price(12).subAttractions(List.of(
-                SubAttraction.builder().attraction(attractions.get(0)).starttime("9:00").endtime("10:00").build(),
-                SubAttraction.builder().attraction(attractions.get(1)).starttime("10:00").endtime("11:00").build(),
-                SubAttraction.builder().attraction(attractions.get(2)).starttime("11:00").endtime("12:00").build()
-        )).build());
+//        tours.add(Tour.builder().name("tourName1").description("tourDescription").logo("https://www.tourLogo.png/").price(12).subAttractions(List.of(
+//                SubAttraction.builder().attraction(attractions.get(0).getName()).starttime("9:00").endtime("10:00").build(),
+//                SubAttraction.builder().attraction(attractions.get(1).getName()).starttime("10:00").endtime("11:00").build(),
+//                SubAttraction.builder().attraction(attractions.get(2).getName()).starttime("11:00").endtime("12:00").build()
+//        )).build());
 
-        tours.add(Tour.builder().name("tourName2").description("tourDescription").logo("https://www.tourLogo.png/").price(12).subAttractions(List.of(
-        )).build());
+//        tours.add(Tour.builder().name("tourName2").description("tourDescription").logo("https://www.tourLogo.png/").price(12).subAttractions(List.of(
+//        )).build());
 
         tourRepository.saveAll(tours);
     }

@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -17,10 +20,8 @@ public class SubAttraction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    Attraction attraction;
+    String tour;
+    String attractionToTour;
     String starttime;
     String endtime;
 
