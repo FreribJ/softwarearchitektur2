@@ -6,10 +6,11 @@
   <h1>Metadaten konnte nicht geladen werden</h1>
 </div>
 <div class="container" *ngIf="!this.error && !this.loading">
-  <div>
-    <div *ngIf="this.metadataForm" class="tile">
+  <div><div> <h2> Edit Metadata</h2> </div>
+    <div *ngIf="this.metadataForm && !this.error" class="tile">
 
-      <form [formGroup]="this.metadataForm" class="example-form" (ngSubmit)="onSubmit()">
+
+      <form [formGroup]="this.metadataForm " class="example-form" (ngSubmit)="onSubmit()">
         <div>
           <mat-form-field class="example-full-width">
             <mat-label>Name</mat-label>
@@ -38,39 +39,39 @@
         </div>
 
 
-        <div *ngFor="let openingHour of getOpeningHoursControls(); let i = index">
+        <div *ngFor="let openingHour of getOpeningHoursControls(); let i = index" [formGroup]="openingHour">
 
           <mat-form-field class="example-full-width">
             <mat-label>Tag</mat-label>
-            <input matInput type="text"  placeholder="Zeitraum" [value]="openingHour.get('openingWeekday')?.value">
+            <input matInput type="text"  placeholder="Zeitraum" formControlName="weekday">
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Zeitraum</mat-label>
-            <input matInput type="text"  placeholder="Zeitraum" [value]="openingHour.get('openingHours')?.value">
+            <input matInput type="text"  placeholder="Zeitraum" formControlName="hour">
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Info</mat-label>
-            <input matInput type="text"  placeholder="Information" [value]="openingHour.get('openingInfo')?.value">
+            <input matInput type="text"  placeholder="Information" formControlName="info">
           </mat-form-field>
           <button mat-raised-button color="warn" (click)="deleteOpeningHours(i)" class="delete-button">Delete</button>
         </div>
         <button mat-raised-button color="accent" type="button" (click)="addOpeningHours()" class="delete-button">Add Opening Hours</button>
 
-        <div *ngFor="let price of getPricesControls(); let i = index">
+        <div *ngFor="let price of getPricesControls(); let i = index" [formGroup]="price">
           <mat-form-field class="example-full-width">
             <mat-label>Kategorie</mat-label>
-            <input matInput type="text"  placeholder="Kategorie" [value]="price.get('prices')?.value">
+            <input matInput type="text"  placeholder="Kategorie"  formControlName="price">
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Preis</mat-label>
-            <input matInput type="number" placeholder="Preis" [value]="price.get('prices')?.value">
+            <input matInput type="number" placeholder="Preis"  formControlName="category">
           </mat-form-field>
           <button mat-raised-button color="warn" type="button" (click)="deletePrice(i)" class="delete-button">Delete</button>
         </div>
         <button mat-raised-button color="accent" type="button" (click)="addPrice()" class="delete-button">Add Price</button>
         <p>
 
-        <button mat-raised-button color="primary" type="submit" [disabled]="!metadataForm.valid">Speichern</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!metadataForm.valid">Save</button>
         </p>
       </form>
     </div>

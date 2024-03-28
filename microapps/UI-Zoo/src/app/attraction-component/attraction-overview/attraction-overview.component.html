@@ -9,14 +9,14 @@
 
 <div *ngIf="!this.error && this.attraction; else elseBlock" class="container">
 <div class="tile">
+  <div *ngIf="direktorModus">
+  <a href="http://localhost:81/attractionEdit?parameter={{attraction?.name}}" target="_blank" class="link"><mat-icon class="rechts">
+    edit
+  </mat-icon></a>
+</div>
   <a [routerLink]="['/attraction-overview',this.attraction.name]" class="link">
     <div class="headline">{{ this.attraction.name }}
-      <div *ngIf="direktorModus">
-         <mat-icon class="rechts">
-               <a href="http://localhost:81/attractionEdit?parameter={{this.attraction.name}}" class="link" target="_blank">
-  edit</a>
-         </mat-icon>
-       </div>
+
     </div>
 
     <div *ngIf="this.attraction.logo"><img [src]="this.attraction.logo" class="image"></div>
@@ -44,7 +44,7 @@
         </mat-chip>
       </mat-chip-listbox>
     </div>
-  </a>
+ </a>
 </div>
   </div>
 

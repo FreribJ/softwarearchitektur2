@@ -43,7 +43,8 @@ export class EditAttractionComponent  implements OnInit{
   constructor(private fb: FormBuilder, private service: ManagementService, private dialog: MatDialog) {
     this.attractionForm= this.fb.group({
       name: [''],
-      logo: [''],description: [''],
+      logo: [''],
+      description: [''],
       tags: this.fb.array([])
     });
   }
@@ -87,10 +88,7 @@ export class EditAttractionComponent  implements OnInit{
     tagArray.clear();
 
     for (let i = 0; i < attraction.tags.length; i++) {
-      const tourGroup = this.fb.group({
-        tagName: [attraction.tags[i]]
-      });
-      tagArray.push(tourGroup);
+      tagArray.push( this.addTag1(attraction.tags[i]));
     }
   }
 
@@ -100,25 +98,39 @@ export class EditAttractionComponent  implements OnInit{
 
   addTag() {
     const tag = this.fb.group({
-      name: [''],
+      tagName: ['']
     });
-
+    this.tagForms.push(tag);
+  }
+  addTag1(tag1: String) {
+    const tag = this.fb.group({
+      tagName: [tag1]
+    });
     this.tagForms.push(tag);
   }
 
   deleteTag(index: number) {
     this.tagForms.removeAt(index);
   }
+
   getTagsControls() {
-    return (this.attractionForm.get('tags') as FormArray).controls;
+    return ((this.attractionForm.get('tags') as FormArray).controls) as FormGroup[];
   }
 
   onSubmit() {
     if (this.attractionForm.valid) {
       if(confirm("Are you sure to safe this Tour?")) {
-
+        let data = this.attractionForm.value
+        data.tags = this.getTagsControls().map(tag => tag.get('tagName')?.value);
+        console.log(data)
         if (this.attractionName != null) {
-        this.service.putAttraction(this.attractionForm.value, this.attractionName).subscribe({
+       // let newAttraction: Attraction = this.attractionForm.value;
+      //  let tagList:String[];
+        if (this.getTagsControls()!= null) {
+          //(this.attractionForm.get('tags') as FormArray).controls.map(tag => tagList.push(tag.get(name) as String));
+          //newAttraction.tags = tagList;
+        }
+          this.service.putAttraction(data, this.attractionName).subscribe({
           next: () => {
             console.log('Attraction changed!');
 
@@ -128,7 +140,8 @@ export class EditAttractionComponent  implements OnInit{
           }
         });
       } else if(this.attractionName == null) {
-        this.service.postAttraction(this.attractionForm.value).subscribe({
+          console.log(this.attractionForm.value);
+        this.service.postAttraction(data).subscribe({
           next: () => {
             console.log('Attraction added!');
 

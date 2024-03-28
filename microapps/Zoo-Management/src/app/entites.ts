@@ -3,7 +3,6 @@ export interface Attraction {
   logo: any;
   description: String;
   tags: String[];
-
 }
 export interface Tour{
   name:String;

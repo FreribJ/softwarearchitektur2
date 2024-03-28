@@ -23,3 +23,24 @@
   margin-right: 50px;
   justify-content: end;
 }
+
+.menu {
+  grid-auto-columns: auto;
+}
+
+.grid{
+  display: grid;
+  column-gap: 20px;
+  grid-auto-columns: auto auto;
+}
+
+.liste{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: right;
+  margin-right: 50px;
+}
+
+.chip{
+  margin-right: 8px
+}

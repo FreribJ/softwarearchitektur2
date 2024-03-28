@@ -10,8 +10,24 @@
 <div class="headline" *ngIf="!this.error && this.tours?.length === 0">
   <div class="headline"> Keine Touren gefunden</div>
 </div>
+<div class="grid">
+  <div *ngIf="this.attractionListe?.length!=0" class="liste">
+    <mat-chip-listbox [multiple]="true">
+      <div class="menu" *ngFor="let chip of this.attractionListe">
 
-<div class="container" *ngIf="this.tours?.length!= 0">
+
+        <span class="chip">
+        <mat-chip-option color="accent" [selected]="isSelected(chip)" class="chip" (click)="toggleSelection(chip)">
+          {{ chip }}
+        </mat-chip-option>
+        </span>
+      </div>
+    </mat-chip-listbox>
+    <button mat-raised-button color="primary" (click)="filtern()">Filter</button>
+    <button *ngIf="this.showList!=this.tours" mat-raised-button color="warn" (click)="loeschen()"><mat-icon>delete</mat-icon></button>
+  </div>
+
+<div class="container" *ngIf="this.showList.length!= 0 && !this.error">
   <div *ngFor="let tour of this.tours;" >
 <app-tour-overview [tour]=tour>
   <a [routerLink]="['/tour-overview',this.tour?.name]" class="link"> </a>
@@ -25,4 +41,5 @@
       add <mat-icon>add</mat-icon>
     </button>
   </a>
+</div>
 </div>

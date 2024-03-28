@@ -104,7 +104,7 @@ export class EditTourComponent implements OnInit {
 
   addAttraction() {
     const attractions = this.fb.group({
-      tag: [''],
+      attraction: [''],
       begin: [''],
       end: ['']
     });
@@ -117,10 +117,11 @@ export class EditTourComponent implements OnInit {
   }
 
   getAttractionsControls() {
-    return (this.tourForm.get('attractions') as FormArray).controls;
+    return ((this.tourForm.get('attractions') as FormArray).controls) as FormGroup[];
   }
 
   onSubmit() {
+    console.log(this.tourForm.value);
     if (this.tourForm.valid) {
       if(confirm("Are you sure to safe this Tour?")) {
 

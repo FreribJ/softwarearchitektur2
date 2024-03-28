@@ -135,10 +135,10 @@ export class EditMetadataComponent implements OnInit {
   }
 
   getOpeningHoursControls() {
-    return (this.metadataForm.get('openingHours') as FormArray).controls;  }
+    return ((this.metadataForm.get('openingHours') as FormArray).controls) as FormGroup[];  }
 
   getPricesControls() {
-    return (this.metadataForm.get('prices') as FormArray).controls;
+    return ((this.metadataForm.get('prices') as FormArray).controls) as FormGroup[];
   }
 
   refreshLogo() {

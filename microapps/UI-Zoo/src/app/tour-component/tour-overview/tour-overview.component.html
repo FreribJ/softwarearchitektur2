@@ -8,14 +8,15 @@
 </h1>
 <div class="container">
   <div class="tile" *ngIf="this.tour">
-    <a [routerLink]="['/tour-overview',this.tour.name]" class="link">
-      <div class="headline">{{ this.tour.name }}
-        <span *ngIf="direktorModus">
+    <div *ngIf="direktorModus">
          <mat-icon class="rechts">
           <a href="http://localhost:81/tourEdit?parameter={{this.tour.name}}" class="link" target="_blank">
           edit</a>
          </mat-icon>
-       </span>
+       </div>
+    <a [routerLink]="['/tour-overview',this.tour.name]" class="link">
+      <div class="headline">{{ this.tour.name }}
+
       </div>
 
       <div *ngIf="this.tour?.logo"><img [src]="this.tour.logo" class="image"></div>

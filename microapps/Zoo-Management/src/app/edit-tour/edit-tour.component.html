@@ -6,8 +6,9 @@
   <h1>Tour konnte nicht geladen werden</h1>
 </div>
 <div class="container" *ngIf="!this.error">
-  <div>
-    <div *ngIf="this.tourForm" class="tile">
+  <div><div> <h2> Edit Tour</h2> </div>
+    <div *ngIf="this.tourForm && !this.error" class="tile">
+
 
       <form [formGroup]="this.tourForm" class="example-form" (ngSubmit)="onSubmit()">
         <div>
@@ -32,26 +33,26 @@
         <div>
           <mat-form-field class="example-full-width">
             <mat-label>price</mat-label>
-            <input matInput type="number" formControlName="description" placeholder="price" cdkTextareaAutosize >
+            <input matInput type="number" formControlName="price" placeholder="price" cdkTextareaAutosize >
           </mat-form-field>
         </div>
 
-        <div *ngFor="let attraction of getAttractionsControls(); let i = index">
+        <div *ngFor="let attraction of getAttractionsControls(); let i = index" [formGroup]="attraction">
           <mat-form-field class="example-full-width">
-            <input matInput type="text"  placeholder="Name" [value]="attraction.get('attraction')?.value">
+            <input matInput type="text" formControlName="attraction" placeholder="Name">
           </mat-form-field>
           <mat-form-field class="example-full-width">
-          <input matInput type="text"  placeholder="Beginn" [value]="attraction.get('begin')?.value">
+            <input matInput type="text" formControlName="begin" placeholder="Beginn">
           </mat-form-field>
           <mat-form-field class="example-full-width">
-          <input matInput type="text"  placeholder="Ende" [value]="attraction.get('end')?.value">
+            <input matInput type="text" formControlName="end" placeholder="Ende">
           </mat-form-field>
           <button mat-raised-button color="warn" (click)="deleteAttraction(i)" class="delete-button">Delete</button>
         </div>
         <button mat-raised-button color="accent" type="button" (click)="addAttraction()" class="delete-button">Add Attraction</button>
         <p>
         <button mat-raised-button color="warn" type="button" class="delete-button" (click)="deleteTour()" *ngIf="this.tourName!=null">Delete</button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!tourForm.valid">Speichern</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!tourForm.valid">Save</button>
         </p>
       </form>
     </div>

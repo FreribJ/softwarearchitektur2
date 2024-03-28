@@ -8,13 +8,16 @@
 
 <div class="container">
   <div>
-    <div *ngIf="this.attractionForm" class="tile">
+    <div> <h2> Edit Attraction</h2> </div>
+    <div *ngIf="this.attractionForm && !this.error" class="tile">
+
 
       <form [formGroup]="this.attractionForm" class="example-form" (ngSubmit)="onSubmit()">
         <div>
           <mat-form-field class="example-full-width">
             <mat-label>Name</mat-label>
             <input matInput type="text" formControlName="name" placeholder="Name">
+
           </mat-form-field>
         </div>
         <div>
@@ -33,17 +36,18 @@
 
 
 
-
-          <div *ngFor="let tag of getTagsControls(); let i = index">
+          <div formArrayName="tags">
+          <div *ngFor="let tag of getTagsControls(); let i = index" [formGroup]="tag">
             <mat-form-field class="example-full-width">
-              <input matInput type="text"  placeholder="Tag" [value]="tag.get('tagName')?.value">
+              <input matInput type="text"  placeholder="Tag"  formControlName="tagName">
             </mat-form-field>
 
             <button mat-raised-button color="warn" type="button" (click)="deleteTag(i)" class="delete-button">Delete</button>
           </div>
+        </div>
           <button mat-raised-button color="accent" type="button" (click)="addTag()" class="delete-button">Add Tag</button>
 <p>
-        <button mat-raised-button color="primary" type="submit" class="delete-button"[disabled]="!attractionForm.valid">Ändern</button>
+        <button mat-raised-button color="primary" type="submit" class="delete-button"[disabled]="!attractionForm.valid">Save</button>
         <button mat-raised-button color="warn" type="button" class="delete-button"(click)="deleteAttraction()" *ngIf="this.attractionName!=null">Delete</button>
         </p>
       </form>
