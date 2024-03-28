@@ -88,7 +88,7 @@ export class EditAttractionComponent  implements OnInit{
     tagArray.clear();
 
     for (let i = 0; i < attraction.tags.length; i++) {
-      tagArray.push( this.addTag1(attraction.tags[i]));
+       this.addTag1(attraction.tags[i]);
     }
   }
 
