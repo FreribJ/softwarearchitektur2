@@ -60,11 +60,11 @@
         <div *ngFor="let price of getPricesControls(); let i = index" [formGroup]="price">
           <mat-form-field class="example-full-width">
             <mat-label>Kategorie</mat-label>
-            <input matInput type="text"  placeholder="Kategorie"  formControlName="price">
+            <input matInput type="text"  placeholder="Kategorie"  formControlName="category">
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Preis</mat-label>
-            <input matInput type="number" placeholder="Preis"  formControlName="category">
+            <input matInput type="number" placeholder="Preis"  formControlName="price">
           </mat-form-field>
           <button mat-raised-button color="warn" type="button" (click)="deletePrice(i)" class="delete-button">Delete</button>
         </div>
